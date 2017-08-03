@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "com.toko.web", "com.toko.module" })
+@ComponentScan(basePackages = { "com.ta.toko.module" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
