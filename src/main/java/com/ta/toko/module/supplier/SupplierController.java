@@ -15,9 +15,15 @@ public class SupplierController {
 		logger.info("SupplierController created");
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public String homePage() {
 		logger.info("supplier home page called..");
 		return "supplier/supplier-entries";
+	}
+	
+	@RequestMapping(value="/add", method = RequestMethod.GET)
+	public String addSupplierPage() {
+		logger.info("supplier add page called..");
+		return "supplier/supplier";
 	}
 }

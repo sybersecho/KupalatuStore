@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Supplier Entries</title>
+<title>Supplier Add</title>
 </head>
 <body>
-	<h1>Supplier test.</h1>
+	<h1>Supplier Add</h1>
 </body>
 </html>
