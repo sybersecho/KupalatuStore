@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -161,8 +162,30 @@
                     	<td>${supplier.supplierAddress.line1}</td>
                     	<td align="center">
                               <a href="<c:url value="/supplier/${supplier.id}"/>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
-                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove" data-original-title><i class="fa fa-trash"></i></a>
+                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove_${supplier.id}" data-original-title><i class="fa fa-trash"></i></a>
                          </td>
+                         <div class="modal fade" id="remove_${supplier.id}" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+				                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                    <h4 class="modal-title">Confirm Delete</h4>
+				                  </div>
+								  <div class="modal-body">
+				                    <p>Are you sure you want to delete this supplier? </p>
+				                  </div>
+								  <div class="modal-footer">
+				                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+				                    <c:url value="/supplier/delete/${supplier.id}" var="confirmDelete"/>
+				                    <form:form method="POST" action="${confirmDelete }">
+				                    
+				                    </form:form>
+				                    <c:url value="/delete/${supplier.id}" var="delete"/>
+				                    <a href="${confirmDelete }" class="btn btn-primary">Confirm</a>
+				                  </div>
+								</div>
+							</div>
+						  </div>
                     </tr>
                     </c:forEach>                  
                     </tbody>
@@ -184,23 +207,7 @@
           </div><!-- /.row -->
 
         </section><!-- /.content -->
-      <div class="modal fade" id="remove" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Modal Danger</h4>
-                  </div>
-				  <div class="modal-body">
-                    <p>One fine body&hellip;</p>
-                  </div>
-				  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-				</div>
-			</div>
-		  </div>
+      
 	  </div><!-- /.content-wrapper -->
 
       <!-- Main Footer -->

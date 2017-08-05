@@ -122,8 +122,8 @@
 						</div>
 						<!-- /.box-header -->
 
-						<c:url var="addSupplier" value="/supplier/add"/>
-						<form:form method="POST" commandName="supplier" action="${addSupplier}" cssClass="form-horizontal">
+						<c:url var="action" value="${actionUrl}"/>
+						<form:form method="POST" commandName="supplier" action="${action}" cssClass="form-horizontal">
 							<form:hidden path="id"/>
 							<div class="box-body">
 								<spring:bind path="code">
@@ -205,11 +205,6 @@
 							<div class="box-footer clearfix">
 								<a href="<c:url value="/supplier"/>" class="btn btn-sm btn-danger btn-flat pull-left">Cancel</a> 
 								<button class="btn btn-sm btn-primary btn-flat pull-right" type="submit" id="submit" value="submit" >Submit</button>
-								<%-- <div class="btn btn-sm btn-danger btn-flat pull-right">
-									<form:button name="submit" value="submit" id="submit" >Submit</form:button>
-								</div> --%>
-								
-								<%-- <a href="<c:url value="/supplier/add"/>" class="btn btn-sm btn-primary btn-flat pull-right" name="submit" value="submit">Submit</a> --%>
 							</div>
 							<!-- /.box-footer -->
 						</form:form>
