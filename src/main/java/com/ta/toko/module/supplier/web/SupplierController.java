@@ -1,4 +1,4 @@
-package com.ta.toko.module.supplier;
+package com.ta.toko.module.supplier.web;
 
 import javax.validation.Valid;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ta.toko.module.supplier.entity.Supplier;
-import com.ta.toko.module.supplier.interfaces.SupplierService;
+import com.ta.toko.entity.Supplier;
+import com.ta.toko.module.supplier.SupplierService;
 
 @Controller
 @RequestMapping("/supplier")
@@ -50,8 +50,8 @@ public class SupplierController {
 			logger.debug("Supplier has error when saving");
 			return "supplier/supplier";
 		}
-		long lastId = service.getAll().get(service.getAll().size() - 1).getId();
-		supplier.setId(lastId + 1);
+//		long lastId = service.getAll().get(service.getAll().size() - 1).getId();
+//		supplier.setId(lastId + 1);
 		service.save(supplier);
 		return "redirect:/supplier";
 	}

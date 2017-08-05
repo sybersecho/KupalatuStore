@@ -15,13 +15,12 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "com.ta.toko.module" })
+@ComponentScan(basePackages = { "com.ta.toko.module" }) // looking for @controller
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public ViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		// viewResolver.setViewClass(JstlView.class);
 		viewResolver.setPrefix("/WEB-INF/views/");
 		viewResolver.setSuffix(".jsp");
 		viewResolver.setViewClass(JstlView.class);
@@ -39,11 +38,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/theme/", "/webjars/");
 	}
-	
+
 	@Bean
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-//		messageSource.setBasename("messages");
 		messageSource.setBasenames("messages", "ValidationMessages");
 		return messageSource;
 	}

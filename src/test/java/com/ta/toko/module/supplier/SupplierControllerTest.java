@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.ta.toko.module.supplier.interfaces.SupplierService;
+import com.ta.toko.module.supplier.web.SupplierController;
 
 public class SupplierControllerTest {
 	@Test
@@ -29,6 +29,13 @@ public class SupplierControllerTest {
 
 		MockMvc mockMvc = standaloneSetup(controller).build();
 
+		/*mockMvc.perform(post("/supplier/add")
+				.param("code", "code")
+				.param("contact", "contact")
+				.param("email", "test@test.com")
+				.param("name", "name")
+				.param("supplierAddress.line1", "line1")
+				.param("supplierAddress.postCode", "postal"));*/
 		mockMvc.perform(post("/supplier/add"));
 	}
 }

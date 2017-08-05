@@ -1,4 +1,4 @@
-package com.ta.toko.module.common.entity;
+package com.ta.toko.entity;
 
 import java.io.Serializable;
 

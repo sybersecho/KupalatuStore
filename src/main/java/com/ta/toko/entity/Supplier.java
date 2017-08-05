@@ -1,12 +1,14 @@
-package com.ta.toko.module.supplier.entity;
+package com.ta.toko.entity;
 
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -15,8 +17,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.ta.toko.module.common.entity.Address;
 
 @Entity
 @Table(name = "supplier")
@@ -28,7 +28,7 @@ public class Supplier implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
 	@NotEmpty
 	@Size(max = 10)
 	private String code;
@@ -39,18 +39,18 @@ public class Supplier implements Serializable {
 	private String email;
 	@NotEmpty
 	private String name;
-
-	@OneToOne(cascade = CascadeType.ALL)
 	@Valid
 	@NotNull
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
 	private Address supplierAddress;
 
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
+		this.id = id;
 	}
 
 	public String getCode() {

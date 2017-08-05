@@ -1,8 +1,8 @@
-package com.ta.toko.module.supplier.interfaces;
+package com.ta.toko.module.supplier;
 
 import java.util.List;
 
-import com.ta.toko.module.supplier.entity.Supplier;
+import com.ta.toko.entity.Supplier;
 
 public interface SupplierService {
 	public List<Supplier> getAll();
