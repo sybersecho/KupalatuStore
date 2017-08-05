@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -41,9 +41,10 @@ public class SupplierController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addNewSupplier(@Valid Supplier supplier, Errors errors, Model model) {
+	public String addNewSupplier(@Valid Supplier supplier, BindingResult bindingResult, Model model) {
 		logger.debug("saving new supplier");
-		if (errors.hasErrors()) {
+		logger.info("supplier address: " + supplier.getSupplierAddress().getLine1());
+		if (bindingResult.hasErrors()) {
 			logger.debug("Supplier has error when saving");
 			return "supplier/supplier";
 		}
@@ -56,6 +57,7 @@ public class SupplierController {
 	private void dummies() {
 		for (int i = 0; i < 12; i++) {
 			Supplier supplier = new Supplier();
+			supplier.setId(Long.valueOf(i));
 			supplier.setName("Product " + (i + 1));
 			supplier.setCode("S00" + (i + 1));
 			supplier.setContact("Contact " + (i + 1));

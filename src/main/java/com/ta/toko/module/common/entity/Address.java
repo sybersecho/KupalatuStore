@@ -7,7 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "address")
@@ -21,12 +22,12 @@ public class Address implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotNull
+	@NotEmpty
 	private String line1;
 	private String line2;
 	private String city;
 	private String state;
-	@NotNull
+	@NotEmpty
 	private String postCode;
 
 	public Long getId() {

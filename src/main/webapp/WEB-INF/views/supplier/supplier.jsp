@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page session="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -123,39 +124,55 @@
 
 						<c:url var="addSupplier" value="/supplier/add"/>
 						<form:form method="POST" commandName="supplier" action="${addSupplier}" cssClass="form-horizontal">
+							<form:hidden path="id"/>
 							<div class="box-body">
-								<div class="form-group">
-									<form:label path="code" cssClass="col-sm-2 control-label">Code</form:label>
-									<div class="col-sm-10">
-										<form:input path="code" cssClass="form-control" placeholder="Code"/>
+								<spring:bind path="code">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="code" cssClass="col-sm-2 control-label">Code</form:label>
+										<div class="col-sm-10">
+											<form:input path="code" cssClass="form-control" placeholder="Code"/>
+											<form:errors path="code" class="control-label" />
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
-									<div class="col-sm-10">
-										<form:input path="name" cssClass="form-control" placeholder="Name"/>
+								</spring:bind>
+								<spring:bind path="name">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
+										<div class="col-sm-10">
+											<form:input path="name" cssClass="form-control" placeholder="Name"/>
+											<form:errors path="name" class="control-label" />
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<form:label path="contact" cssClass="col-sm-2 control-label">Contact</form:label>
-									<div class="col-sm-10">
-										<form:input path="contact" cssClass="form-control" placeholder="Contact"/>
+								</spring:bind>
+								<spring:bind path="contact">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="contact" cssClass="col-sm-2 control-label">Contact</form:label>
+										<div class="col-sm-10">
+											<form:input path="contact" cssClass="form-control" placeholder="Contact"/>
+											<form:errors path="contact" class="control-label" />
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<form:label path="email" cssClass="col-sm-2 control-label">Email</form:label>
-									<div class="col-sm-10">
-										<form:input path="email" cssClass="form-control" placeholder="Email"/>
+								</spring:bind>
+								<spring:bind path="email">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="email" cssClass="col-sm-2 control-label">Email</form:label>
+										<div class="col-sm-10">
+											<form:input path="email" cssClass="form-control" placeholder="Email"/>
+											<form:errors path="email" class="control-label" />
+										</div>
 									</div>
-								</div>
+								</spring:bind>
 
 								<legend>Address Details</legend>
-								<div class="form-group">
-									<form:label path="supplierAddress.line1" cssClass="col-sm-2 control-label">Line 1</form:label>									
-									<div class="col-sm-10">
-										<form:input path="supplierAddress.line1" cssClass="form-control" placeholder="Address Line 1"/>
+								<spring:bind path="supplierAddress.line1">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="supplierAddress.line1" cssClass="col-sm-2 control-label">Line 1</form:label>									
+										<div class="col-sm-10">
+											<form:input path="supplierAddress.line1" cssClass="form-control" placeholder="Address Line 1"/>
+											<form:errors path="supplierAddress.line1" class="control-label" />
+										</div>
 									</div>
-								</div>
+								</spring:bind>
 								<div class="form-group">
 									<form:label path="supplierAddress.line2" cssClass="col-sm-2 control-label">Line 2</form:label>
 									<div class="col-sm-10">
@@ -168,17 +185,21 @@
 										<form:input path="supplierAddress.city" cssClass="form-control" placeholder="City"/>
 									</div>
 								</div>
+								<spring:bind path="supplierAddress.postCode">
 								<div class="form-group">
 									<form:label path="supplierAddress.state" cssClass="col-sm-2 control-label">State</form:label>
 									<div class="col-sm-4">
 										<form:input path="supplierAddress.state" cssClass="form-control" placeholder="State"/>
 									</div>
-
-									<form:label path="supplierAddress.postCode" cssClass="col-sm-2 control-label">Post Code</form:label>
-									<div class="col-sm-4">
+									<div class="${status.error  ? 'has-error' : ''}">
+									<form:label path="supplierAddress.postCode" cssClass="col-sm-2 control-label ">Post Code</form:label>									
+									<div class="col-sm-4 ">
 										<form:input path="supplierAddress.postCode" cssClass="form-control" placeholder="Post Code"/>
-									</div>
+										<form:errors path="supplierAddress.postCode" class="control-label" />
+									</div>		
+									</div>						
 								</div>
+								</spring:bind>	
 							</div>
 							<!-- /.box-body -->
 							<div class="box-footer clearfix">

@@ -147,6 +147,7 @@
                         <th>Name</th>
                         <th>Contact</th>
                         <th>Email</th>
+                        <th>Address</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -157,6 +158,7 @@
                     	<td>${supplier.name}</td>
                     	<td>${supplier.contact}</td>
                     	<td>${supplier.email}</td>
+                    	<td>${supplier.supplierAddress.line1}</td>
                     	<td align="center">
                               <a href="<c:url value="/supplier/${supplier.id}"/>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
                               <a class="btn btn-danger" data-toggle="modal" data-target="#remove" data-original-title><i class="fa fa-trash"></i></a>
@@ -170,6 +172,7 @@
                         <th>Name</th>
                         <th>Contact</th>
                         <th>Email</th>
+                        <th>Address</th>
                         <th></th>
                       </tr>
                     </tfoot>

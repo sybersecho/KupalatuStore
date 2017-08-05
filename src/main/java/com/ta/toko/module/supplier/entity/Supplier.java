@@ -9,8 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.ta.toko.module.common.entity.Address;
 
@@ -25,16 +29,20 @@ public class Supplier implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
-	@NotNull
-	@Size(max=10)
+	@NotEmpty
+	@Size(max = 10)
 	private String code;
-	@NotNull
+	@NotEmpty
 	private String contact;
-	@NotNull
+	@NotEmpty
+	@Email
 	private String email;
-	@NotNull
+	@NotEmpty
 	private String name;
+
 	@OneToOne(cascade = CascadeType.ALL)
+	@Valid
+	@NotNull
 	private Address supplierAddress;
 
 	public Long getId() {
