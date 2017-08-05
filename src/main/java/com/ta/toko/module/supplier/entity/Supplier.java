@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.ta.toko.module.common.entity.Address;
 
@@ -23,9 +25,14 @@ public class Supplier implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
+	@NotNull
+	@Size(max=10)
 	private String code;
+	@NotNull
 	private String contact;
+	@NotNull
 	private String email;
+	@NotNull
 	private String name;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address supplierAddress;

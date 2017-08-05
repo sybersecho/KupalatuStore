@@ -2,6 +2,8 @@
 /build/
 /bin/
 target/
+src/main/webapp/resources/
+logs/
  
 # OS Files #
 .DS_Store
@@ -58,7 +60,6 @@ local.properties
 .settings/
 .loadpath
 /src/main/resources/rebel.xml
-src/main/webapp/resources/
 # External tool builders
 .externalToolBuilders/
  

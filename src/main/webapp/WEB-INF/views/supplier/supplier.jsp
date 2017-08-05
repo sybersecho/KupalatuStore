@@ -121,8 +121,7 @@
 						</div>
 						<!-- /.box-header -->
 
-						<%-- <form class="form-horizontal"> --%>
-						<c:url var="addSupplier" value="/supplier/test"/>
+						<c:url var="addSupplier" value="/supplier/add"/>
 						<form:form method="POST" commandName="supplier" action="${addSupplier}" cssClass="form-horizontal">
 							<div class="box-body">
 								<div class="form-group">
