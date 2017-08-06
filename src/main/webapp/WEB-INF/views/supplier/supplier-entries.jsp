@@ -112,7 +112,14 @@
 			<li class="active">
               <a href="<c:url value="/supplier"/>">
                 <i class="fa fa-users"></i> <span>Manage Supplier</span>
-              </a>		
+              </a>
+           	</li>
+           	<li>
+				<a href="<c:url value="/product"/>"> 
+					<i class="fa fa-barcode"></i><!--  fa-archive -->
+					<span>Manage Product</span>
+				</a>
+			</li>		
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
@@ -141,7 +148,7 @@
 				</div><!-- /.box-header -->
 				
                 <div class="box-body">
-                  <table id="example1" class="table table-bordered table-striped">
+                  <table id="supplier" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Code</th>
@@ -297,7 +304,7 @@
     <script src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js"/>"></script>
 	<script>
       $(function () {        
-        $('#example1').DataTable({
+        $('#supplier').DataTable({
 			"dom": '<<"pull-left"i><"pull-right"f>>t<"bottom pull-left"p>',
 			"ordering": false,			
         });

@@ -99,9 +99,17 @@
 		<ul class="sidebar-menu">
 			<li class="header">Main Navigation</li>
 			<!-- Optionally, you can add icons to the links -->
-			<li class="active"><a href="<c:url value="/supplier"/>"> <i
-					class="fa fa-users"></i> <span>Manage Supplier</span>
-			</a>
+			<li class="active">
+				<a href="<c:url value="/supplier"/>"> 
+					<i class="fa fa-users"></i> <span>Manage Supplier</span>
+				</a>
+			</li>
+			<li>
+				<a href="<c:url value="/product"/>"> 
+					<i class="fa fa-barcode"></i><!--  fa-archive -->
+					<span>Manage Product</span>
+				</a>
+			</li>
 		</ul>
 		<!-- /.sidebar-menu --> </section> <!-- /.sidebar --> </aside>
 

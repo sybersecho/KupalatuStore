@@ -21,9 +21,11 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String barcode;
 	private String description;
 	private Integer quantity;
 	private BigDecimal salesPrice;
+	private String unit;
 
 	public Long getId() {
 		return id;
@@ -63,6 +65,22 @@ public class Product implements Serializable {
 
 	public void setSalesPrice(BigDecimal salesPrice) {
 		this.salesPrice = salesPrice;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 }
