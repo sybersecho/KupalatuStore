@@ -56,7 +56,7 @@ public class ProductController {
 		}
 
 		products.add(product);
-		
+
 		model.addFlashAttribute("alert", true);
 		return "redirect:/product";
 	}
@@ -76,15 +76,20 @@ public class ProductController {
 		model.addAttribute("actionUrl", "/product/" + id);
 		return "product/product";
 	}
-	
-	//TODO is this needed?
+
+	// TODO is this needed?
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String saveProductDetailPage(@PathVariable Long id, Product product, RedirectAttributes model) {
-		logger.debug("show detail of product with ID: " + id);
-//		model.addAttribute("product", findById(id));
+	public String saveProductDetailPage(@Valid Product product, BindingResult result, RedirectAttributes model) {
+		logger.debug("show detail of product with ID: " + product.getId());
+
+		if (result.hasErrors()) {
+			logger.debug("Fail to update product.");
+			return "product/product";
+		}
+
 		updateProduct(product);
 		model.addFlashAttribute("alert", true);
-//		model.addAttribute("actionUrl", "/product/" + id);
+		// model.addAttribute("actionUrl", "/product/" + id);
 		return "redirect:/product";
 	}
 
@@ -114,17 +119,15 @@ public class ProductController {
 		}
 		return p;
 	}
-	
+
 	private void updateProduct(Product updatedP) {
-		logger.debug("before: product size: " + products.size());
-		for(int i= 0; i < products.size(); i++) {
+		for (int i = 0; i < products.size(); i++) {
 			if (products.get(i).getId() == updatedP.getId()) {
 				products.remove(i);
 				products.add(i, updatedP);
 				break;
 			}
 		}
-		logger.debug("after _ product size: " + products.size());
 	}
 
 	private List<Product> emptyList() {

@@ -148,7 +148,7 @@
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
-	                    	<spring:bind path="barcode">
+	                    	<spring:bind path="name">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 								<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
                       			<div class="col-sm-10">
