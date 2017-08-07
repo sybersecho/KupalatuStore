@@ -184,8 +184,30 @@
 				                      	<td>${product.name }</td>
 				                      	<td>
 				                              <a href="<c:url value="/product/${product.id}"/>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
-				                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove" data-original-title><i class="fa fa-trash"></i></a>
+				                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove_${product.id }" data-original-title><i class="fa fa-trash"></i></a>
 				                         </td>
+				                         <div class="modal fade" id="remove_${product.id}" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+								                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								                    <h4 class="modal-title">Confirm Delete</h4>
+								                  </div>
+												  <div class="modal-body">
+								                    <p>Are you sure you want to delete this product? </p>
+								                  </div>
+												  <div class="modal-footer">
+								                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+								                    <c:url value="/product/delete/${product.id}" var="confirmDelete"/>
+								                    <form:form method="POST" action="${confirmDelete }">
+								                    
+								                    </form:form>
+								                    <c:url value="/delete/${product.id}" var="delete"/>
+								                    <a href="${confirmDelete }" class="btn btn-primary">Confirm</a>
+								                  </div>
+												</div>
+											</div>
+										  </div>
                     				</tr>
 				                    </c:forEach>
                     			</tbody>

@@ -92,6 +92,15 @@ public class ProductController {
 		// model.addAttribute("actionUrl", "/product/" + id);
 		return "redirect:/product";
 	}
+	
+	//TODO change request method to post
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public String deleteProduct(@PathVariable Long id, RedirectAttributes model) {
+		logger.debug("delete product with ID: " + id);
+//		model.addAttribute("actionUrl", "/product/" + id);
+		deleteProduct(id);
+		return "redirect:/product";
+	}
 
 	private List<Product> products = new ArrayList<Product>();
 
@@ -125,6 +134,15 @@ public class ProductController {
 			if (products.get(i).getId() == updatedP.getId()) {
 				products.remove(i);
 				products.add(i, updatedP);
+				break;
+			}
+		}
+	}
+	
+	private void deleteProduct(long id) {
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getId() == id) {
+				products.remove(i);
 				break;
 			}
 		}
