@@ -140,24 +140,33 @@
 			               	</div><!-- /. tools -->
 		                </div><!-- /.box-header -->
 		                <div class="box-body">
-			                <form class="form-horizontal">
+		                	<c:if test="${alert }">
+		                		<div class="alert alert-success alert-dismissable">
+			                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			                    Success save a product.
+		                  	</div>
+		                	</c:if>
+		                	
+			                <c:url var="action" value="${actionUrl}"/>
+							<form:form method="POST" commandName="criteria" action="${action}" cssClass="form-horizontal">
 			                	<div class="form-group">
-									<label for="barcode" class="col-sm-2 control-label">Barcode</label>
-                      				<div class="col-sm-10">
-                        				<input type="text" class="form-control" id="barcode" placeholder="Barcode">
+			                		<form:label path="barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
+									<div class="col-sm-10">
+										<form:input path="barcode" cssClass="form-control" placeholder="Barcode"/>
 	                      			</div>
 	                    		</div>
 	                    		<div class="form-group">
-									<label for="name" class="col-sm-2 control-label">Name</label>
+	                    			<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
                       				<div class="col-sm-10">
-                        				<input type="text" class="form-control" id="name" placeholder="Name">
+                      					<form:input path="name" cssClass="form-control" placeholder="Name"/>
 	                      			</div>
 	                    		</div>
-	                    		<button type="submit" class="btn btn-default btn-flat">Clear</button>
+	                    		<c:url value="/product" var="clear" />
+	                    		<a href="${clear }" class="btn btn-default btn-flat">Clear</a>
                     			<button type="submit" class="btn btn-primary btn-flat pull-right">Search</button>
-			                </form>
+			                </form:form>
 		                </div><!-- /.box-body -->
-		                <div class="box-body table-responsive">
+		                <div class="box-body">
 		                	<table id="product" class="table table-striped">
                     			<thead>
                       			<tr>
@@ -168,16 +177,17 @@
                       			</tr>
                     			</thead>
                     			<tbody>
+                    				<c:forEach var="product" items="${products }" varStatus="index">
                     				<tr>
-				                  		<td>183</td>
-				                      	<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-				                      	<td>Bob Doe</td>
+                    					<td>${index.count }</td>
+				                      	<td>${product.barcode }</td>
+				                      	<td>${product.name }</td>
 				                      	<td>
 				                              <a class="btn btn-warning"><i class="fa fa-pencil"></i></a>
 				                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove" data-original-title><i class="fa fa-trash"></i></a>
 				                         </td>
-				                      
-				                    </tr>
+                    				</tr>
+				                    </c:forEach>
                     			</tbody>
                     		</table>
 		                </div><!-- /.box-body -->

@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity
 @Table(name = "product")
 public class Product implements Serializable {
@@ -20,11 +22,13 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotEmpty
 	private String name;
+	@NotEmpty
 	private String barcode;
 	private String description;
-	private Integer quantity;
-	private BigDecimal salesPrice;
+	private Integer quantity = 0;
+	private BigDecimal salesPrice = BigDecimal.ZERO;
 	private String unit;
 
 	public Long getId() {

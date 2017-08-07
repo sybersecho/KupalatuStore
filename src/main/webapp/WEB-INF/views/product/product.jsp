@@ -135,20 +135,28 @@
 						<div class="box-header with-border">
 							<h3 class="box-title">Product Information</h3>							
 		                </div><!-- /.box-header -->
-		                <form class="form-horizontal">
+		                <c:url var="action" value="${actionUrl}"/>
+		                <form:form method="POST" commandName="product" action="${action}" cssClass="form-horizontal">
 		                <div class="box-body">
-		                	<div class="form-group">
-		                		<label for="barcode" class="col-sm-2 control-label">Barcode</label>
-		                		<div class="col-sm-10">
-		                			<input type="text" class="form-control" id="barcode" placeholder="Barcode">
+		                	<form:hidden path="id"/>
+		                	<spring:bind path="barcode">
+		                	<div class="form-group ${status.error  ? 'has-error' : ''}">
+		                		<form:label path="barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
+								<div class="col-sm-10">
+									<form:input path="barcode" cssClass="form-control" placeholder="Barcode"/>
+									<form:errors path="barcode" class="control-label" />
 	                      		</div>
 	                    	</div>
-	                    	<div class="form-group">
-								<label for="name" class="col-sm-2 control-label">Name</label>
+	                    	</spring:bind>
+	                    	<spring:bind path="barcode">
+	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
                       			<div class="col-sm-10">
-                        			<input type="text" class="form-control" id="name" placeholder="Name">
+                      				<form:input path="name" cssClass="form-control" placeholder="Name"/>
+                      				<form:errors path="name" class="control-label" />
 	                      		</div>
 	                    	</div>
+	                    	</spring:bind>
 	                    	<div class="form-group">
 								<label for="unit" class="col-sm-2 control-label">Unit</label>
                       			<div class="col-sm-10">
@@ -163,10 +171,10 @@
                    			 </div>
 		                </div><!-- /.box-body -->
 		                <div class="box-footer clearfix">
-		                	<a href="<c:url value="/supplier"/>" class="btn btn-sm btn-danger btn-flat pull-left">Cancel</a> 
+		                	<a href="<c:url value="/product"/>" class="btn btn-sm btn-danger btn-flat pull-left">Cancel</a> 
 							<button class="btn btn-sm btn-primary btn-flat pull-right" type="submit" id="submit" value="submit" >Submit</button>
 						</div><!-- /.box-footer -->	
-						</form>	                
+						</form:form>	                
 					</div><!-- /.box -->
 				</div><!-- /.col -->
 			</div><!-- /.row --> 
