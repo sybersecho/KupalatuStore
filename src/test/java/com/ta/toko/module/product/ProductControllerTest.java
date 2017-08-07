@@ -21,7 +21,7 @@ import com.ta.toko.module.product.web.ProductController;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RootConfig.class, WebAppInitializer.class })
 @WebAppConfiguration
-public class ProductSupplierTest {
+public class ProductControllerTest {
 	
 	@Autowired
 	private ProductController controller;
@@ -49,7 +49,7 @@ public class ProductSupplierTest {
 	}
 	
 	@Test
-	public void testShowAddProducPpage() throws Exception {		
+	public void testShowAddProductPage() throws Exception {		
 		mockMvc.perform(get("/product/add"))
 			.andExpect(status().isOk())
 			.andExpect(view().name("product/product"))
@@ -78,5 +78,21 @@ public class ProductSupplierTest {
 			.andExpect(view().name("product/product"))
 			.andExpect(model().attributeHasFieldErrors("product", "name"))
 			.andExpect(model().attributeHasFieldErrors("product", "barcode"));
+	}
+	
+	@Test
+	public void testShowProductDetailPage() throws Exception {		
+		mockMvc.perform(get("/product/{id}",1L))
+			.andExpect(status().isOk())
+			.andExpect(view().name("product/product"))
+			.andExpect(model().attributeExists("product"))
+			.andExpect(model().attributeExists("actionUrl"));
+	}
+	
+	@Test
+	public void testEditProduct() throws Exception {		
+		mockMvc.perform(post("/product/{id}", 1L).param("barcode", "barcode").param("name", "Name"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/product"));
 	}
 }

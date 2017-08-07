@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -45,15 +46,17 @@ public class ProductController {
 		model.addAttribute("product", new Product());
 		return "product/product";
 	}
-	
+
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String addProduct(@Valid Product product, BindingResult result, RedirectAttributes model) {
 		logger.debug("Saving a product");
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			logger.debug("product has error");
 			return "product/product";
 		}
+
 		products.add(product);
+		
 		model.addFlashAttribute("alert", true);
 		return "redirect:/product";
 	}
@@ -64,6 +67,25 @@ public class ProductController {
 		model.addAttribute("products", products);
 		model.addAttribute("actionUrl", "/product/search");
 		return "product/product-entries";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String showProductDetailPage(@PathVariable Long id, Model model) {
+		logger.debug("show detail of product with ID: " + id);
+		model.addAttribute("product", findById(id));
+		model.addAttribute("actionUrl", "/product/" + id);
+		return "product/product";
+	}
+	
+	//TODO is this needed?
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public String saveProductDetailPage(@PathVariable Long id, Product product, RedirectAttributes model) {
+		logger.debug("show detail of product with ID: " + id);
+//		model.addAttribute("product", findById(id));
+		updateProduct(product);
+		model.addFlashAttribute("alert", true);
+//		model.addAttribute("actionUrl", "/product/" + id);
+		return "redirect:/product";
 	}
 
 	private List<Product> products = new ArrayList<Product>();
@@ -81,6 +103,28 @@ public class ProductController {
 
 			products.add(p);
 		}
+	}
+
+	private Product findById(long id) {
+		Product p = new Product();
+		for (Product product : products) {
+			if (product.getId() == id) {
+				return product;
+			}
+		}
+		return p;
+	}
+	
+	private void updateProduct(Product updatedP) {
+		logger.debug("before: product size: " + products.size());
+		for(int i= 0; i < products.size(); i++) {
+			if (products.get(i).getId() == updatedP.getId()) {
+				products.remove(i);
+				products.add(i, updatedP);
+				break;
+			}
+		}
+		logger.debug("after _ product size: " + products.size());
 	}
 
 	private List<Product> emptyList() {

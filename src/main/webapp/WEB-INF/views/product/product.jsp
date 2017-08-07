@@ -157,18 +157,24 @@
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
-	                    	<div class="form-group">
-								<label for="unit" class="col-sm-2 control-label">Unit</label>
+	                    	<spring:bind path="unit">
+	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
+	                    		<form:label path="unit" cssClass="col-sm-2 control-label">Unit</form:label>
                       			<div class="col-sm-10">
-                        			<input type="text" class="form-control" id="unit" placeholder="Unit">
+                        			<form:input path="unit" cssClass="form-control" placeholder="Unit"/>
+                      				<form:errors path="unit" class="control-label" />
 	                      		</div>
 	                    	</div>
-	                    	<div class="form-group">
-	                    		<label for="descirption" class="col-sm-2 control-label">Description</label>
-                      			<div class="col-sm-10">
-                      				<textarea class="form-control" rows="3" placeholder="Description ..."></textarea>
+	                    	</spring:bind>
+	                    	<spring:bind path="description">
+	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
+	                    		<form:label path="description" cssClass="col-sm-2 control-label">Description</form:label>
+                      			<div class="col-sm-10">                      				
+                      				<form:textarea path="description" rows="3" cssClass="form-control" placeholder="Description ..."/>
+                      				<form:errors path="description" class="control-label" />
                    			 	</div>
                    			 </div>
+	                    	</spring:bind>
 		                </div><!-- /.box-body -->
 		                <div class="box-footer clearfix">
 		                	<a href="<c:url value="/product"/>" class="btn btn-sm btn-danger btn-flat pull-left">Cancel</a> 

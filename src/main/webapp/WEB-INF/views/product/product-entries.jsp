@@ -183,7 +183,7 @@
 				                      	<td>${product.barcode }</td>
 				                      	<td>${product.name }</td>
 				                      	<td>
-				                              <a class="btn btn-warning"><i class="fa fa-pencil"></i></a>
+				                              <a href="<c:url value="/product/${product.id}"/>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
 				                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove" data-original-title><i class="fa fa-trash"></i></a>
 				                         </td>
                     				</tr>
