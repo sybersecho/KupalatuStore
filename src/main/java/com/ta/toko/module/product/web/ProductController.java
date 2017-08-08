@@ -26,7 +26,6 @@ import com.ta.toko.module.product.ProductService;
 public class ProductController {
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-	// @Autowired
 	private ProductService service;
 
 	@Autowired
@@ -71,9 +70,9 @@ public class ProductController {
 
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String searchProduct(@ModelAttribute("criteria") ProductCriteria criteria, Model model) {
-		logger.debug("Search product with barcode: " + criteria.getBarcode() + " and Name: " + criteria.getName());
-		//FIXME change to service.search(criteria)
-		model.addAttribute("products", service.getAll());
+		logger.debug("Search product with: " + criteria.toString());
+		
+		model.addAttribute("products", service.search(criteria));
 		model.addAttribute("actionUrl", "/product/search");
 		return "product/product-entries";
 	}
@@ -107,7 +106,6 @@ public class ProductController {
 	public String deleteProduct(@PathVariable Long id, RedirectAttributes model) {
 		logger.debug("delete product with ID: " + id);
 
-//		deleteProduct(id);
 		service.delete(id);
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success delete a product.");
@@ -115,51 +113,6 @@ public class ProductController {
 	}
 
 	// FIXME remove these method when the service is ready
-//	private List<Product> products = new ArrayList<Product>();
-//
-//	private void dummies() {
-//		for (int i = 1; i <= 15; i++) {
-//			Product p = new Product();
-//			p.setId(Long.valueOf(i));
-//			p.setBarcode("123123123" + i);
-//			p.setDescription("description of object " + i);
-//			p.setName("Product " + i);
-//			p.setQuantity(0);
-//			p.setSalesPrice(BigDecimal.ZERO);
-//			p.setUnit("PCS");
-//
-//			products.add(p);
-//		}
-//	}
-//
-//	private Product findById(long id) {
-//		Product p = new Product();
-//		for (Product product : products) {
-//			if (product.getId() == id) {
-//				return product;
-//			}
-//		}
-//		return p;
-//	}
-//
-//	private void updateProduct(Product updatedP) {
-//		for (int i = 0; i < products.size(); i++) {
-//			if (products.get(i).getId() == updatedP.getId()) {
-//				products.remove(i);
-//				products.add(i, updatedP);
-//				break;
-//			}
-//		}
-//	}
-//
-//	private void deleteProduct(long id) {
-//		for (int i = 0; i < products.size(); i++) {
-//			if (products.get(i).getId() == id) {
-//				products.remove(i);
-//				break;
-//			}
-//		}
-//	}
 
 	private List<Product> emptyList() {
 		return new ArrayList<Product>();

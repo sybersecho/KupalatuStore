@@ -19,5 +19,16 @@ public class ProductCriteria {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Barcode: ");
+		builder.append(this.barcode);
+		builder.append(", ");
+		builder.append("Name: ");
+		builder.append(this.name);
+		return builder.toString();
+	}
 
 }

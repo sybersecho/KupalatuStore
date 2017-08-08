@@ -58,6 +58,12 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	@Override
+	public List<Product> search(ProductCriteria criteria) {
+		logger.debug("product service call search with criteria: " + criteria.toString());
+		return products;
+	}
+
 	private List<Product> products = new ArrayList<Product>();
 
 	private void dummies() {
