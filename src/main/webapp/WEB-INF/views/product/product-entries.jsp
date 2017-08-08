@@ -143,7 +143,8 @@
 		                	<c:if test="${alert }">
 		                		<div class="alert alert-success alert-dismissable">
 			                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			                    Success save a product.
+			                    <!-- Success save a product. -->
+			                    ${alertMessage }
 		                  	</div>
 		                	</c:if>
 		                	

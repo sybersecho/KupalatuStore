@@ -55,9 +55,12 @@ public class ProductController {
 			return "product/product";
 		}
 
+		long dummyId = products.get(products.size() -1).getId() + 1;
+		product.setId(dummyId);
 		products.add(product);
 
 		model.addFlashAttribute("alert", true);
+		model.addFlashAttribute("alertMessage", "Success save a product.");
 		return "redirect:/product";
 	}
 
@@ -89,6 +92,7 @@ public class ProductController {
 
 		updateProduct(product);
 		model.addFlashAttribute("alert", true);
+		model.addFlashAttribute("alertMessage", "Success update a product.");
 		// model.addAttribute("actionUrl", "/product/" + id);
 		return "redirect:/product";
 	}
@@ -99,6 +103,8 @@ public class ProductController {
 		logger.debug("delete product with ID: " + id);
 //		model.addAttribute("actionUrl", "/product/" + id);
 		deleteProduct(id);
+		model.addFlashAttribute("alert", true);
+		model.addFlashAttribute("alertMessage", "Success delete a product.");
 		return "redirect:/product";
 	}
 

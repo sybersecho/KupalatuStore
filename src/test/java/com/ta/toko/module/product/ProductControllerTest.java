@@ -68,7 +68,9 @@ public class ProductControllerTest {
 	public void testAddProduct() throws Exception {		
 		mockMvc.perform(post("/product/add").param("barcode", "barcode").param("name", "Name"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/product"));
+			.andExpect(view().name("redirect:/product"))
+			.andExpect(flash().attributeExists("alert"))
+			.andExpect(flash().attributeExists("alertMessage"));
 	}
 	
 	@Test
@@ -93,6 +95,17 @@ public class ProductControllerTest {
 	public void testEditProduct() throws Exception {		
 		mockMvc.perform(post("/product/{id}", 1L).param("barcode", "barcode").param("name", "Name"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/product"));
+			.andExpect(view().name("redirect:/product"))
+			.andExpect(flash().attributeExists("alert"))
+			.andExpect(flash().attributeExists("alertMessage"));
+	}
+	
+	@Test
+	public void testDeleteProduct() throws Exception {		
+		mockMvc.perform(get("/product/delete/{id}",1L))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/product"))
+			.andExpect(flash().attributeExists("alert"))
+			.andExpect(flash().attributeExists("alertMessage"));
 	}
 }
