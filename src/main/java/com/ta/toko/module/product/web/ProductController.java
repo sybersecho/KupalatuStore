@@ -39,6 +39,7 @@ public class ProductController {
 		logger.debug("product home page called..");
 		model.addAttribute("actionUrl", "/product/search");
 		model.addAttribute("criteria", new ProductCriteria());
+		//TODO CHANGE EMPTYLIST WITH SOMETHING
 		model.addAttribute("products", emptyList());
 		return "product/product-entries";
 	}
@@ -58,9 +59,6 @@ public class ProductController {
 			return "product/product";
 		}
 		//FIXME remove this fake generate id when dao is ready
-		List<Product> products = service.getAll();
-		long dummyId = products.get(products.size() - 1).getId() + 1;
-		product.setId(dummyId);
 		service.save(product);
 
 		model.addFlashAttribute("alert", true);
