@@ -141,7 +141,8 @@
 		                </div><!-- /.box-header -->
 		                <div class="box-body">
 		                	<c:if test="${alert }">
-		                		<div class="alert alert-success alert-dismissable">
+		                		<!-- <div class="alert alert-success alert-dismissable"> -->
+		                		<div class="alert ${alertType } alert-dismissable">
 			                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			                    <!-- Success save a product. -->
 			                    ${alertMessage }
@@ -150,18 +151,22 @@
 		                	
 			                <c:url var="action" value="${actionUrl}"/>
 							<form:form method="POST" commandName="criteria" action="${action}" cssClass="form-horizontal">
-			                	<div class="form-group">
+			                	<spring:bind path="barcode">
+			                	<div class="form-group ${status.error  ? 'has-error' : ''}">
 			                		<form:label path="barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
 									<div class="col-sm-10">
 										<form:input path="barcode" cssClass="form-control" placeholder="Barcode"/>
-	                      			</div>
-	                    		</div>
-	                    		<div class="form-group">
-	                    			<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
-                      				<div class="col-sm-10">
-                      					<form:input path="name" cssClass="form-control" placeholder="Name"/>
-	                      			</div>
-	                    		</div>
+		                      		</div>
+		                    	</div>
+		                    	</spring:bind>
+		                    	<spring:bind path="name">
+		                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
+									<form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
+	                      			<div class="col-sm-10">
+	                      				<form:input path="name" cssClass="form-control" placeholder="Name"/>
+		                      		</div>
+		                    	</div>
+		                    	</spring:bind>
 	                    		<c:url value="/product" var="clear" />
 	                    		<a href="${clear }" class="btn btn-default btn-flat">Clear</a>
                     			<button type="submit" class="btn btn-primary btn-flat pull-right">Search</button>
