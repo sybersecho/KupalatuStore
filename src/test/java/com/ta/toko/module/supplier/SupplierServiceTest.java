@@ -1,6 +1,6 @@
 package com.ta.toko.module.supplier;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;

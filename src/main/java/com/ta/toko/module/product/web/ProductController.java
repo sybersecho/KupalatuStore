@@ -1,6 +1,5 @@
 package com.ta.toko.module.product.web;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ta.toko.entity.Product;
 import com.ta.toko.module.product.ProductCriteria;
+import com.ta.toko.module.product.ProductService;
 
 @Controller
 @RequestMapping("/product")
@@ -26,9 +27,12 @@ public class ProductController {
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	// @Autowired
-	public ProductController() {
+	private ProductService service;
+
+	@Autowired
+	public ProductController(ProductService service) {
 		logger.info("ProductController created");
-		dummies();
+		this.service = service;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -54,10 +58,11 @@ public class ProductController {
 			logger.debug("product has error");
 			return "product/product";
 		}
-
-		long dummyId = products.get(products.size() -1).getId() + 1;
+		//FIXME remove this fake generate id when dao is ready
+		List<Product> products = service.getAll();
+		long dummyId = products.get(products.size() - 1).getId() + 1;
 		product.setId(dummyId);
-		products.add(product);
+		service.save(product);
 
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success save a product.");
@@ -67,7 +72,8 @@ public class ProductController {
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String searchProduct(@ModelAttribute("criteria") ProductCriteria criteria, Model model) {
 		logger.debug("Search product with barcode: " + criteria.getBarcode() + " and Name: " + criteria.getName());
-		model.addAttribute("products", products);
+		//FIXME change to service.search(criteria)
+		model.addAttribute("products", service.getAll());
 		model.addAttribute("actionUrl", "/product/search");
 		return "product/product-entries";
 	}
@@ -75,7 +81,7 @@ public class ProductController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String showProductDetailPage(@PathVariable Long id, Model model) {
 		logger.debug("show detail of product with ID: " + id);
-		model.addAttribute("product", findById(id));
+		model.addAttribute("product", service.findById(id));
 		model.addAttribute("actionUrl", "/product/" + id);
 		return "product/product";
 	}
@@ -90,69 +96,70 @@ public class ProductController {
 			return "product/product";
 		}
 
-		updateProduct(product);
+		service.update(product);
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success update a product.");
-		// model.addAttribute("actionUrl", "/product/" + id);
 		return "redirect:/product";
 	}
-	
-	//TODO change request method to post
+
+	// TODO change request method to post
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public String deleteProduct(@PathVariable Long id, RedirectAttributes model) {
 		logger.debug("delete product with ID: " + id);
-//		model.addAttribute("actionUrl", "/product/" + id);
-		deleteProduct(id);
+
+//		deleteProduct(id);
+		service.delete(id);
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success delete a product.");
 		return "redirect:/product";
 	}
 
-	private List<Product> products = new ArrayList<Product>();
-
-	private void dummies() {
-		for (int i = 1; i <= 15; i++) {
-			Product p = new Product();
-			p.setId(Long.valueOf(i));
-			p.setBarcode("123123123" + i);
-			p.setDescription("description of object " + i);
-			p.setName("Product " + i);
-			p.setQuantity(0);
-			p.setSalesPrice(BigDecimal.ZERO);
-			p.setUnit("PCS");
-
-			products.add(p);
-		}
-	}
-
-	private Product findById(long id) {
-		Product p = new Product();
-		for (Product product : products) {
-			if (product.getId() == id) {
-				return product;
-			}
-		}
-		return p;
-	}
-
-	private void updateProduct(Product updatedP) {
-		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getId() == updatedP.getId()) {
-				products.remove(i);
-				products.add(i, updatedP);
-				break;
-			}
-		}
-	}
-	
-	private void deleteProduct(long id) {
-		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getId() == id) {
-				products.remove(i);
-				break;
-			}
-		}
-	}
+	// FIXME remove these method when the service is ready
+//	private List<Product> products = new ArrayList<Product>();
+//
+//	private void dummies() {
+//		for (int i = 1; i <= 15; i++) {
+//			Product p = new Product();
+//			p.setId(Long.valueOf(i));
+//			p.setBarcode("123123123" + i);
+//			p.setDescription("description of object " + i);
+//			p.setName("Product " + i);
+//			p.setQuantity(0);
+//			p.setSalesPrice(BigDecimal.ZERO);
+//			p.setUnit("PCS");
+//
+//			products.add(p);
+//		}
+//	}
+//
+//	private Product findById(long id) {
+//		Product p = new Product();
+//		for (Product product : products) {
+//			if (product.getId() == id) {
+//				return product;
+//			}
+//		}
+//		return p;
+//	}
+//
+//	private void updateProduct(Product updatedP) {
+//		for (int i = 0; i < products.size(); i++) {
+//			if (products.get(i).getId() == updatedP.getId()) {
+//				products.remove(i);
+//				products.add(i, updatedP);
+//				break;
+//			}
+//		}
+//	}
+//
+//	private void deleteProduct(long id) {
+//		for (int i = 0; i < products.size(); i++) {
+//			if (products.get(i).getId() == id) {
+//				products.remove(i);
+//				break;
+//			}
+//		}
+//	}
 
 	private List<Product> emptyList() {
 		return new ArrayList<Product>();
