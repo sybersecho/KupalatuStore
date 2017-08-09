@@ -18,4 +18,8 @@ public interface ProductService {
 	public List<Product> search(ProductCriteria criteria);
 
 	public void deleteAll();
+	
+	public List<Product> emptyList();
+	
+	
 }

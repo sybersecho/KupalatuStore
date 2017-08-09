@@ -1,5 +1,6 @@
 package com.ta.toko.module.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -65,6 +66,12 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> search(ProductCriteria criteria) {
 		logger.debug("product service call search with criteria: " + criteria.toString());
 		return dao.search(criteria);
+	}
+
+	@Override
+	public List<Product> emptyList() {
+		logger.debug("Product Service call empty list method");
+		return new ArrayList<Product>();
 	}
 
 }

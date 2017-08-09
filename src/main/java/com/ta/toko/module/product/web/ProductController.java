@@ -1,8 +1,5 @@
 package com.ta.toko.module.product.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -27,7 +24,7 @@ public class ProductController {
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	private ProductService service;
-	
+
 	@Autowired
 	private ProductSearchValidator validator;
 
@@ -42,8 +39,7 @@ public class ProductController {
 		logger.debug("product home page called..");
 		model.addAttribute("actionUrl", "/product/search");
 		model.addAttribute("criteria", new ProductCriteria());
-		// TODO CHANGE EMPTYLIST WITH SOMETHING
-		model.addAttribute("products", emptyList());
+		model.addAttribute("products", service.emptyList());
 		return "product/product-entries";
 	}
 
@@ -63,26 +59,27 @@ public class ProductController {
 		}
 
 		service.save(product);
-//		<div class="alert alert-success alert-dismissable">
-		model.addFlashAttribute("alertType","alert-success");
+		// <div class="alert alert-success alert-dismissable">
+		model.addFlashAttribute("alertType", "alert-success");
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success save a product.");
 		return "redirect:/product";
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public String searchProduct(@ModelAttribute("criteria") ProductCriteria criteria, BindingResult result,Model model) {
+	public String searchProduct(@ModelAttribute("criteria") ProductCriteria criteria, BindingResult result,
+			Model model) {
 		logger.debug("Search product with: " + criteria.toString());
-		
+
 		validator.validate(criteria, result);
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			logger.info("product criteria has error");
-			model.addAttribute("alertType","alert-danger");
+			model.addAttribute("alertType", "alert-danger");
 			model.addAttribute("alert", true);
 			model.addAttribute("alertMessage", "Please fill in one of the criteria");
 			return "product/product-entries";
-		}		
-		
+		}
+
 		model.addAttribute("products", service.search(criteria));
 		model.addAttribute("actionUrl", "/product/search");
 		return "product/product-entries";
@@ -107,8 +104,8 @@ public class ProductController {
 		}
 
 		service.update(product);
-		
-		model.addFlashAttribute("alertType","alert-success");
+
+		model.addFlashAttribute("alertType", "alert-success");
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success update a product.");
 		return "redirect:/product";
@@ -120,15 +117,9 @@ public class ProductController {
 		logger.debug("delete product with ID: " + id);
 
 		service.delete(id);
-		model.addFlashAttribute("alertType","alert-success");
+		model.addFlashAttribute("alertType", "alert-success");
 		model.addFlashAttribute("alert", true);
 		model.addFlashAttribute("alertMessage", "Success delete a product.");
 		return "redirect:/product";
-	}
-
-	// FIXME remove these method when the service is ready
-
-	private List<Product> emptyList() {
-		return new ArrayList<Product>();
 	}
 }
