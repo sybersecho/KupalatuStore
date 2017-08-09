@@ -14,6 +14,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String homePage() {
 		logger.info("redirect to supplier home page");
-		return "redirect:/supplier";
+		return "redirect:/purchase";
 	}
 }
