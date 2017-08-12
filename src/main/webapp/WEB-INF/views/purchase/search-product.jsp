@@ -23,10 +23,6 @@
 <!-- Ionicons -->
 <link rel="stylesheet"
 	href="<c:url value="/resources/ionicons/2.0.1/css/ionicons.min.css"/>">
-<!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/timepicker/bootstrap-timepicker.min.css"/>">
-<!-- Select2 -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/select2/select2.min.css"/>">
 <!-- Theme style -->
 <link rel="stylesheet"
 	href="<c:url value="/resources/dist/css/AdminLTE.min.css"/>">
@@ -134,95 +130,52 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-          		<h1>Purchase Information</h1>
+          		<h1>Manage Product</h1>
         	</section>
 
 			<!-- Main content -->
 			<section class="content">
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="box box-info">
-		                <c:url var="action" value="${actionUrl}"/>
-		                <form:form method="POST" commandName="productLine" action="${action}" cssClass="form-horizontal">
-		                <div class="box-body">
-	                    	<div class="form-group">
-	                    		<form:label path="product.barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
-                      			<div class="col-sm-10">
-                        			<form:input path="product.barcode" cssClass="form-control" placeholder="Barcode"/>
-                      				<form:errors path="product.barcode" class="control-label" />
-	                      		</div>	                      		
-	                    	</div>
-	                    	<div class="form-group">
-								<form:label path="product.name" cssClass="col-sm-2 control-label">Name</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="product.name" cssClass="form-control" placeholder="Name"/>
-                      				<form:errors path="product.name" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	<div class="form-group">
-								<form:label path="quantity" cssClass="col-sm-2 control-label">Quantity</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="quantity" cssClass="form-control" placeholder="Quantity"/>
-                      				<form:errors path="quantity" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	<div class="form-group">
-								<form:label path="purchasePrice" cssClass="col-sm-2 control-label">Purchase Price</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="purchasePrice" cssClass="form-control" placeholder="Purchase Price"/>
-                      				<form:errors path="purchasePrice" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	<div class="pull-right">
-		                    	<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="search" ><i class="fa fa-search"></i> Search</button>
-		                    	<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="add" ><i class="fa fa-plus-square"></i> Add</button>
-	                    	</div>
-		                </div><!-- /.box-body -->
-		                <%-- <c:if test=""></c:if> --%>
-		                <div class="box-header with-border">
-							<h3 class="box-title">Product Detail</h3>							
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Search Result</h3>
+							<!-- tools box -->
+			               	<div class="pull-right box-tools">
+			              		<a href="<c:url value="/product/add" />" class="btn btn-info btn-sm btn-flat"  title="Cancel">Cancel</a>
+			               	</div><!-- /. tools -->
 		                </div><!-- /.box-header -->
-		                <div class="box-body table-responsive">
+		                <div class="box-body">
 		                	<table id="product" class="table table-striped">
-			                	<thead>
-	                      			<tr>
-									  <th>Name</th>								  
-									  <th>Quantity</th>
-									  <th>Price</th>								  
-									  <th>Total</th>
-									  <th>Sell Price</th>
-									  <th style="width: 100px"></th>
-	                      			</tr>
-	                    		</thead>
+                    			<thead>
+                      			<tr>
+								  <th>#</th>
+								  <th>Barcode</th>
+								  <th>Name</th>
+								  <th>Action</th>
+                      			</tr>
+                    			</thead>
                     			<tbody>
-                    			<c:forEach var="pline" items="${purchased.productLineInfos }" varStatus="index">
+                    				<c:forEach var="product" items="${products }" varStatus="index">
                     				<tr>
-                    					<td>${pline.product.name }</td>
-                    					<td>${pline.quantity }</td>
-                    					<td>${pline.purchasePrice }</td>
-                    					<td>${pline.totalItem }</td>
-                    					<td>${pline.sellingPrice }</td>
-                    					<td>
-                    						<div class="pull-right">
-                    							<a href="" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                    							<a href="" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
-					                    	</div>
-                    					</td>                    					
+                    					<td>${index.count }</td>
+				                      	<td>${product.barcode }</td>
+				                      	<td>${product.name }</td>
+				                      	<td>
+				                              <a href="<c:url value="/purchase/product/${product.id}"/>" class="btn btn-warning"><i class="fa fa-pencil">Select</i></a>
+				                         </td>
                     				</tr>
-                    			</c:forEach>
+				                    </c:forEach>
                     			</tbody>
-		                	</table>
-						</div><!-- /.box-footer -->
-		                <div class="box-footer clearfix">
-		                	<a href="<c:url value="/purchase"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a> 
-							<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="action" name="action"  value="next" >Next</button>
-						</div><!-- /.box-footer -->
-		                </form:form>		                	                
+                    		</table>
+		                </div><!-- /.box-body -->
 					</div><!-- /.box -->
 				</div><!-- /.col -->
 			</div><!-- /.row --> 
 			</section><!-- /.content -->
-		</div><!-- /.content-wrapper -->
+
+		</div>
+		<!-- /.content-wrapper -->
 
 		<!-- Main Footer -->
 		<footer class="main-footer"> <!-- To the right -->
@@ -252,16 +205,16 @@
 		src="<c:url value="/resources/plugins/datatables/jquery.dataTables.min.js"/>"></script>
 	<script
 		src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js"/>"></script>
-	<!-- Select2 -->
-    <script src="<c:url value="/resources/plugins/select2/select2.full.min.js"/>"></script>
-	<!-- InputMask -->
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.js"/>"></script>
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"/>"></script>
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.extensions.js"/>"></script>
 	<script>
       $(function () {        
-		//Datemask dd/mm/yyyy
-        $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        $('#product').DataTable({
+		"sDom": '<"row view-filter"<"col-sm-12"<"pull-left"i><"pull-right"><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"p>>>',
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "autoWidth": false
+        });
       });
     </script>
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.

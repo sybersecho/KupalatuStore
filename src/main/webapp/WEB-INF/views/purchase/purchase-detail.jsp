@@ -27,6 +27,8 @@
 <link rel="stylesheet" href="<c:url value="/resources/plugins/timepicker/bootstrap-timepicker.min.css"/>">
 <!-- Select2 -->
 <link rel="stylesheet" href="<c:url value="/resources/plugins/select2/select2.min.css"/>">
+<!-- DatePicer -->
+<link rel="stylesheet" href="<c:url value="/resources/plugins/datepicker/datepicker3.css"/>">
 <!-- Theme style -->
 <link rel="stylesheet"
 	href="<c:url value="/resources/dist/css/AdminLTE.min.css"/>">
@@ -122,7 +124,7 @@
 			</li>
 			<li class="active">
 				<a href="<c:url value="/purchase"/>"> 
-					<i class="fa  fa-shopping-cart"></i>
+					<i class="fa fa-opencart"></i>
 					<span>Purchase</span>
 				</a>
 			</li>
@@ -146,17 +148,14 @@
 							<h3 class="box-title">Purchase Detail</h3>							
 		                </div><!-- /.box-header -->
 		                <c:url var="action" value="${actionUrl}"/>
-		                <form:form method="POST" commandName="purchased" action="${action}" cssClass="form-horizontal">
+		                <form:form method="POST" modelAttribute="purchased"  action="${action}" cssClass="form-horizontal">
 		                <div class="box-body">
-		                	<form:hidden path="totalPurchased"/>
-		                	<form:hidden path="tempPurcaseDetail"/>
-		                	<form:hidden path="purchasedDetails"/>
-		                	<spring:bind path="pruchaseNo">
+		                	<spring:bind path="purchaseNo">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="pruchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
+	                    		<form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
                       			<div class="col-sm-10">
-                        			<form:input path="pruchaseNo" cssClass="form-control" placeholder="No Purchase"/>
-                      				<form:errors path="pruchaseNo" class="control-label" />
+                        			<form:input path="purchaseNo" cssClass="form-control" placeholder="No Purchase"/>
+                      				<form:errors path="purchaseNo" class="control-label" />
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
@@ -164,16 +163,17 @@
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 	                    		<form:label path="purchaseDate" cssClass="col-sm-2 control-label">Date</form:label>
                       			<div class="col-sm-10">
-                        			<form:input path="purchaseDate" cssClass="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask=""/>
+                        			<form:input path="purchaseDate" cssClass="form-control" />
+                        			<form:errors path="purchaseDate" class="control-label" />
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
-	                    	<spring:bind path="supplier">
+	                    	<spring:bind path="supplier.id">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="supplier" cssClass="col-sm-2 control-label">Supplier</form:label>
+	                    		<form:label path="supplier.id" cssClass="col-sm-2 control-label">Supplier</form:label>
                       			<div class="col-sm-10">
-                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;">
-                        				<form:options items="${suppliers }" itemValue="id" itemLabel="name"/>
+                        			<form:select path="supplier.id" cssClass="form-control select2" style="width: 100%;">
+                        				<form:options items="${suppliers }" itemValue="id" itemLabel="name" />
                         			</form:select>
 	                      		</div>
 	                    	</div>
@@ -189,7 +189,7 @@
 	                    	</spring:bind>
 		                </div><!-- /.box-body -->
 		                <div class="box-footer clearfix">
-		                	<a href="<c:url value="/purchase"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a> 
+		                	<a href="<c:url value="/purchase/clear"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a> 
 							<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="submit" value="submit" >Next</button>
 						</div><!-- /.box-footer -->
 		                </form:form>		                	                
@@ -233,10 +233,16 @@
     <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.js"/>"></script>
     <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"/>"></script>
     <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.extensions.js"/>"></script>
+    <!-- DatePicker -->
+    <script src="<c:url value="/resources/plugins/datepicker/bootstrap-datepicker.js"/>"></script>
 	<script>
       $(function () {        
 		//Datemask dd/mm/yyyy
-        $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+       	/* $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"}); */
+       	/* $("#purchaseDate").datepicker({
+       		format:"dd/mm/yyyy"
+       	}); */
+       	$("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
       });
     </script>
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.
