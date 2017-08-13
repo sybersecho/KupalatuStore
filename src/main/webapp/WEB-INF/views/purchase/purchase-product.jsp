@@ -236,7 +236,7 @@
 												<td>
 													<div class="pull-right">
 														<a href='<c:url value="/purchase/product/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> 
-														<a href="" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
+														<a href='<c:url value="/purchase/product/delete/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
 													</div>
 												</td>
 											</tr>

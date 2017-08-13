@@ -143,23 +143,6 @@ public class PurchaseController {
 		return "purchase/search-product";
 	}
 
-	private void addProductLineToPurchase(PurchaseInfo purchased, ProductLineInfo productLine) {
-		// check if index is not 0
-		int lineIndex = productLine.getIndex();
-		logger.debug("line of index: " + lineIndex);
-		if (lineIndex > 0) {
-			purchased.getProductLineInfos().remove(lineIndex - 1);
-			purchased.getProductLineInfos().add(lineIndex - 1, productLine);
-		} else {
-			int sizeOfLines = purchased.getProductLineInfos().size();
-			logger.debug("size of lines: " + sizeOfLines);
-			productLine.setIndex(sizeOfLines + 1);
-			logger.debug("set line position to: " + productLine.getIndex());
-			purchased.getProductLineInfos().add(productLine);
-		}
-
-	}
-
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
 	public String selectedProduct(HttpSession session, @PathVariable Long id,
 			@ModelAttribute("productLine") ProductLineInfo productLine, BindingResult result,
@@ -190,9 +173,40 @@ public class PurchaseController {
 		return "redirect:/purchase/product";
 	}
 
+	@RequestMapping(value = "/product/delete/line/{index}", method = RequestMethod.GET)
+	public String deleteSelectedLine(@PathVariable("index") int index, HttpSession session,
+			RedirectAttributes redirect) {
+		logger.debug("delete product line index: " + index);
+		// get purchased
+		PurchaseInfo pInfo = PurchaseSessionUtil.getPurchaseInSession(session);
+		// get product line info
+		pInfo.getProductLineInfos().remove(index - 1);
+
+		redirect.addFlashAttribute("productLine", new ProductLineInfo());
+		redirect.addFlashAttribute("actionUrl", "/purchase/next/confirm");
+		return "redirect://purchase/product";
+	}
+
 	private void calculatedTotal(ProductLineInfo productLine) {
 		BigDecimal tot = productLine.getPurchasePrice().multiply(BigDecimal.valueOf(productLine.getQuantity()));
 		productLine.setTotalItem(tot);
+	}
+
+	private void addProductLineToPurchase(PurchaseInfo purchased, ProductLineInfo productLine) {
+		// check if index is not 0
+		int lineIndex = productLine.getIndex();
+		logger.debug("line of index: " + lineIndex);
+		if (lineIndex > 0) {
+			purchased.getProductLineInfos().remove(lineIndex - 1);
+			purchased.getProductLineInfos().add(lineIndex - 1, productLine);
+		} else {
+			int sizeOfLines = purchased.getProductLineInfos().size();
+			logger.debug("size of lines: " + sizeOfLines);
+			productLine.setIndex(sizeOfLines + 1);
+			logger.debug("set line position to: " + productLine.getIndex());
+			purchased.getProductLineInfos().add(productLine);
+		}
+
 	}
 
 	private Product getById(Long id) {
