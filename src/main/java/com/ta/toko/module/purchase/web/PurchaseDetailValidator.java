@@ -25,11 +25,11 @@ public class PurchaseDetailValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "purchaseDate", "NotEmpty.purchase.purchaseDate");
 
 		
-		if (isPurchaseDateNull(purchase)) {
-			errors.rejectValue("purchaseDate", "NotEmpty1.purchase.purchaseDate");
+		if (isPurchaseDateNullOrStringEmpty(purchase) ) {
+			errors.rejectValue("purchaseDate", "NotEmpty.purchase.purchaseDate");
 		}
 
-		if (!isPurchaseDateNull(purchase) && isInFuture(purchase)) {
+		if (!isPurchaseDateNullOrStringEmpty(purchase) && isInFuture(purchase)) {
 			errors.rejectValue("purchaseDate", "NotInfuture.purchase.purchaseDate");
 		}
 	}
@@ -38,8 +38,8 @@ public class PurchaseDetailValidator implements Validator {
 		return purchase.getPurchaseDate().compareTo(new Date()) > 0;
 	}
 
-	private boolean isPurchaseDateNull(PurchaseInfo purchase) {
-		return purchase.getPurchaseDate() == null;
+	private boolean isPurchaseDateNullOrStringEmpty(PurchaseInfo purchase) {
+		return purchase.getPurchaseDate() == null || purchase.getPurchaseDate().toString().isEmpty();
 	}
 
 }

@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ta.toko.entity.Address;
 import com.ta.toko.entity.Product;
 import com.ta.toko.entity.Supplier;
+import com.ta.toko.module.product.web.ProductLineAddValidator;
 import com.ta.toko.module.purchase.model.ProductLineInfo;
 import com.ta.toko.module.purchase.model.PurchaseConstant;
 import com.ta.toko.module.purchase.model.PurchaseInfo;
@@ -40,6 +41,10 @@ public class PurchaseController {
 
 	@Autowired
 	PurchaseDetailValidator detailValidator;
+	@Autowired
+	ProductLineSearchValidator productSearchValidator;
+	@Autowired
+	ProductLineAddValidator productAddValidator;
 
 	public PurchaseController() {
 		logger.debug("Purchase Controller created");
@@ -103,19 +108,32 @@ public class PurchaseController {
 	@RequestMapping(value = "/next/confirm", method = RequestMethod.POST)
 	public String showSearchProductPage(@RequestParam("action") String action,
 			@ModelAttribute("productLine") ProductLineInfo productLine, BindingResult result, HttpSession session,
-			RedirectAttributes redirectModel, Model model) {
+			RedirectAttributes redirectModel, Model model, HttpServletRequest request) {
 		logger.debug("Show result search products page");
 
 		if (action.equals("search")) {
 			logger.debug("action is search");
+			productSearchValidator.validate(productLine, result);
+			if (result.hasErrors()) {
+				return "purchase/purchase-product";
+			}
 			// TODO CALL SERVICE TO RETRIEVE PRODUCT BASE ON CRITERIA
 			model.addAttribute("products", products);
 			model.addAttribute("productLine", productLine);
 			return "purchase/search-product";
 		} else if (action.equals("add")) {
 			logger.debug("action is add");
+
+			productAddValidator.validate(productLine, result);
+			if (result.hasErrors()) {
+				// print(model, request, session);
+				return "purchase/purchase-product";
+			}
+
 			PurchaseInfo p = PurchaseSessionUtil.getPurchaseInSession(session);
-			p.getProductLineInfos().add(productLine);
+			calculatedTotal(productLine);
+			addProductLineToPurchase(p, productLine);
+			// p.getProductLineInfos().add(productLine);
 			productLine = new ProductLineInfo();
 			redirectModel.addFlashAttribute("productLine", new ProductLineInfo());
 			redirectModel.addFlashAttribute(PurchaseConstant.SESSION_NAME, p);
@@ -123,6 +141,23 @@ public class PurchaseController {
 			return "redirect:/purchase/product";
 		}
 		return "purchase/search-product";
+	}
+
+	private void addProductLineToPurchase(PurchaseInfo purchased, ProductLineInfo productLine) {
+		// check if index is not 0
+		int lineIndex = productLine.getIndex();
+		logger.debug("line of index: " + lineIndex);
+		if (lineIndex > 0) {
+			purchased.getProductLineInfos().remove(lineIndex - 1);
+			purchased.getProductLineInfos().add(lineIndex - 1, productLine);
+		} else {
+			int sizeOfLines = purchased.getProductLineInfos().size();
+			logger.debug("size of lines: " + sizeOfLines);
+			productLine.setIndex(sizeOfLines + 1);
+			logger.debug("set line position to: " + productLine.getIndex());
+			purchased.getProductLineInfos().add(productLine);
+		}
+
 	}
 
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
@@ -133,10 +168,31 @@ public class PurchaseController {
 		// get product by id selected:
 		Product p = getById(id);
 		// show selected product on screen
+		logger.debug("Prod id: " + p.getId());
 		productLine.setProduct(p);
 		model.addFlashAttribute("productLine", productLine);
 		model.addFlashAttribute("actionUrl", "/purchase/next/confirm");
 		return "redirect:/purchase/product";
+	}
+
+	@RequestMapping(value = "/product/line/{index}", method = RequestMethod.GET)
+	public String selectedProductLine(@PathVariable("index") int index, HttpSession session,
+			RedirectAttributes redirect) {
+		logger.debug("Select product info index: " + index);
+		// get purchased
+		PurchaseInfo pInfo = PurchaseSessionUtil.getPurchaseInSession(session);
+		// get product line info
+		ProductLineInfo pLine = pInfo.getProductLineInfos().get(index - 1);
+
+		redirect.addFlashAttribute("productLine", pLine);
+		redirect.addFlashAttribute("actionUrl", "/purchase/next/confirm");
+
+		return "redirect:/purchase/product";
+	}
+
+	private void calculatedTotal(ProductLineInfo productLine) {
+		BigDecimal tot = productLine.getPurchasePrice().multiply(BigDecimal.valueOf(productLine.getQuantity()));
+		productLine.setTotalItem(tot);
 	}
 
 	private Product getById(Long id) {

@@ -24,9 +24,11 @@
 <link rel="stylesheet"
 	href="<c:url value="/resources/ionicons/2.0.1/css/ionicons.min.css"/>">
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/timepicker/bootstrap-timepicker.min.css"/>">
+<link rel="stylesheet"
+	href="<c:url value="/resources/plugins/timepicker/bootstrap-timepicker.min.css"/>">
 <!-- Select2 -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/select2/select2.min.css"/>">
+<link rel="stylesheet"
+	href="<c:url value="/resources/plugins/select2/select2.min.css"/>">
 <!-- Theme style -->
 <link rel="stylesheet"
 	href="<c:url value="/resources/dist/css/AdminLTE.min.css"/>">
@@ -48,15 +50,14 @@
 	<div class="wrapper">
 
 		<!-- Main Header -->
-		<header class="main-header"> <!-- Logo --> 
-			<a
+		<header class="main-header"> <!-- Logo --> <a
 			href="index2.html" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
 			<span class="logo-mini"><b>A</b>LT</span> <!-- logo for regular state and mobile devices -->
 			<span class="logo-lg"><b>Admin</b>LTE</span>
 		</a> <!-- Header Navbar --> <nav class="navbar navbar-static-top"
-			role="navigation"> <!-- Sidebar toggle button--> <a
-			href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-			<span class="sr-only">Toggle navigation</span>
+			role="navigation"> <!-- Sidebar toggle button--> <a href="#"
+			class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span
+			class="sr-only">Toggle navigation</span>
 		</a> <!-- Navbar Right Menu -->
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
@@ -64,8 +65,8 @@
 				<li class="dropdown user user-menu"><a href="#"
 					class="dropdown-toggle" data-toggle="dropdown"> <img
 						src="<c:url value="/resources/dist/img/user2-160x160.jpg"/>"
-						class="user-image" alt="User Image"> <span
-						class="hidden-xs">Alexander Pierce</span>
+						class="user-image" alt="User Image"> <span class="hidden-xs">Alexander
+							Pierce</span>
 				</a>
 					<ul class="dropdown-menu">
 						<!-- User image -->
@@ -94,8 +95,7 @@
 								<a href="#" class="btn btn-default btn-flat">Profile</a>
 							</div>
 							<div class="pull-right">
-								<a href="#" class="btn btn-default btn-flat">Sign
-									out</a>
+								<a href="#" class="btn btn-default btn-flat">Sign out</a>
 							</div>
 						</li>
 					</ul></li>
@@ -108,121 +108,160 @@
 		<ul class="sidebar-menu">
 			<li class="header">Main Navigation</li>
 			<!-- Optionally, you can add icons to the links -->
-			<li>
-				<a href="<c:url value="/supplier"/>"> 
-					<i class="fa fa-users"></i> 
-					<span>Manage Supplier</span>
-				</a>
-			</li>
-			<li>
-				<a href="<c:url value="/product"/>"> 
-					<i class="fa fa-barcode"></i>
-					<span>Manage Product</span>
-				</a>
-			</li>
-			<li class="active">
-				<a href="<c:url value="/purchase"/>"> 
-					<i class="fa fa-opencart"></i>
-					<span>Purchase</span>
-				</a>
-			</li>
-		</ul> <!-- /.sidebar-menu --> 
-		</section> <!-- /.sidebar --> 
-		</aside>
+			<li><a href="<c:url value="/supplier"/>"> <i
+					class="fa fa-users"></i> <span>Manage Supplier</span>
+			</a></li>
+			<li><a href="<c:url value="/product"/>"> <i
+					class="fa fa-barcode"></i> <span>Manage Product</span>
+			</a></li>
+			<li class="active"><a href="<c:url value="/purchase"/>"> <i
+					class="fa fa-opencart"></i> <span>Purchase</span>
+			</a></li>
+		</ul>
+		<!-- /.sidebar-menu --> </section> <!-- /.sidebar --> </aside>
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-          		<h1>Purchase Information</h1>
-        	</section>
+			<h1>Purchase Information</h1>
+			</section>
 
 			<!-- Main content -->
 			<section class="content">
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="box box-info">
-		                <c:url var="action" value="${actionUrl}"/>
-		                <form:form method="POST" commandName="productLine" action="${action}" cssClass="form-horizontal">
-		                <div class="box-body">
-	                    	<div class="form-group">
-	                    		<form:label path="product.barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
-                      			<div class="col-sm-10">
-                        			<form:input path="product.barcode" cssClass="form-control" placeholder="Barcode"/>
-                      				<form:errors path="product.barcode" class="control-label" />
-	                      		</div>	                      		
-	                    	</div>
-	                    	<div class="form-group">
-								<form:label path="product.name" cssClass="col-sm-2 control-label">Name</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="product.name" cssClass="form-control" placeholder="Name"/>
-                      				<form:errors path="product.name" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	<div class="form-group">
-								<form:label path="quantity" cssClass="col-sm-2 control-label">Quantity</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="quantity" cssClass="form-control" placeholder="Quantity"/>
-                      				<form:errors path="quantity" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	<div class="form-group">
-								<form:label path="purchasePrice" cssClass="col-sm-2 control-label">Purchase Price</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="purchasePrice" cssClass="form-control" placeholder="Purchase Price"/>
-                      				<form:errors path="purchasePrice" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	<div class="pull-right">
-		                    	<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="search" ><i class="fa fa-search"></i> Search</button>
-		                    	<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="add" ><i class="fa fa-plus-square"></i> Add</button>
-	                    	</div>
-		                </div><!-- /.box-body -->
-		                <%-- <c:if test=""></c:if> --%>
-		                <div class="box-header with-border">
-							<h3 class="box-title">Product Detail</h3>							
-		                </div><!-- /.box-header -->
-		                <div class="box-body table-responsive">
-		                	<table id="product" class="table table-striped">
-			                	<thead>
-	                      			<tr>
-									  <th>Name</th>								  
-									  <th>Quantity</th>
-									  <th>Price</th>								  
-									  <th>Total</th>
-									  <th>Sell Price</th>
-									  <th style="width: 100px"></th>
-	                      			</tr>
-	                    		</thead>
-                    			<tbody>
-                    			<c:forEach var="pline" items="${purchased.productLineInfos }" varStatus="index">
-                    				<tr>
-                    					<td>${pline.product.name }</td>
-                    					<td>${pline.quantity }</td>
-                    					<td>${pline.purchasePrice }</td>
-                    					<td>${pline.totalItem }</td>
-                    					<td>${pline.sellingPrice }</td>
-                    					<td>
-                    						<div class="pull-right">
-                    							<a href="" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                    							<a href="" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
-					                    	</div>
-                    					</td>                    					
-                    				</tr>
-                    			</c:forEach>
-                    			</tbody>
-		                	</table>
-						</div><!-- /.box-footer -->
-		                <div class="box-footer clearfix">
-		                	<a href="<c:url value="/purchase"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a> 
-							<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="action" name="action"  value="next" >Next</button>
-						</div><!-- /.box-footer -->
-		                </form:form>		                	                
-					</div><!-- /.box -->
-				</div><!-- /.col -->
-			</div><!-- /.row --> 
-			</section><!-- /.content -->
-		</div><!-- /.content-wrapper -->
+						<c:url var="action" value="${actionUrl}" />
+						<form:form method="POST" commandName="productLine" action="${action}" cssClass="form-horizontal">
+							<div class="box-body">
+								<form:hidden path="index" />
+								<spring:bind path="product.id">
+									<form:hidden path="product.id" />
+									<c:if test="${status.error }">
+										<div class="alert alert-danger alert-dismissable">
+											<form:errors path="product.id" class="control-label" />
+										</div>
+									</c:if>
+								</spring:bind>
+								<spring:bind path="product.barcode">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="product.barcode"
+											cssClass="col-sm-2 control-label">Barcode</form:label>
+										<div class="col-sm-10">
+											<form:input path="product.barcode" cssClass="form-control"
+												placeholder="Barcode" />
+											<form:errors path="product.barcode" class="control-label" />
+										</div>
+									</div>
+								</spring:bind>
+								<spring:bind path="product.name">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="product.name"
+											cssClass="col-sm-2 control-label">Name</form:label>
+										<div class="col-sm-10">
+											<form:input path="product.name" cssClass="form-control"
+												placeholder="Name" />
+											<form:errors path="product.name" class="control-label" />
+										</div>
+									</div>
+								</spring:bind>
+								<spring:bind path="quantity">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="quantity" cssClass="col-sm-2 control-label">Quantity</form:label>
+										<div class="col-sm-10">
+											<form:input path="quantity" cssClass="form-control"
+												placeholder="Quantity" />
+											<form:errors path="quantity" class="control-label" />
+										</div>
+									</div>
+								</spring:bind>
+								<spring:bind path="purchasePrice">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="purchasePrice"
+											cssClass="col-sm-2 control-label">Purchase Price</form:label>
+										<div class="col-sm-10">
+											<form:input path="purchasePrice" cssClass="form-control"
+												placeholder="Purchase Price" />
+											<form:errors path="purchasePrice" class="control-label" />
+										</div>
+									</div>
+								</spring:bind>
+								<spring:bind path="product.salesPrice">
+									<div class="form-group ${status.error  ? 'has-error' : ''}">
+										<form:label path="product.salesPrice" cssClass="col-sm-2 control-label">Sales Price</form:label>
+										<div class="col-sm-10">
+											<form:input path="product.salesPrice" cssClass="form-control" placeholder="Sales Price" />
+											<form:errors path="product.salesPrice" class="control-label" />
+										</div>
+									</div>
+								</spring:bind>
+								<div class="pull-right">
+									<button class="btn btn-primary btn-sm" type="submit"
+										id="action" name="action" value="search">
+										<i class="fa fa-search"></i> Search
+									</button>
+									<button class="btn btn-primary btn-sm" type="submit"
+										id="action" name="action" value="add">
+										<i class="fa fa-plus-square"></i> Add
+									</button>
+								</div>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-header with-border">
+								<h3 class="box-title">Product Detail</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body table-responsive">
+								<table id="product" class="table table-striped">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Quantity</th>
+											<th>Price</th>
+											<th>Total</th>
+											<th>Sell Price</th>
+											<th style="width: 100px"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="pline" items="${purchased.productLineInfos }"
+											varStatus="index">
+											<tr>
+												<td>${pline.product.name }</td>
+												<td>${pline.quantity }</td>
+												<td>${pline.purchasePrice }</td>
+												<td>${pline.totalItem }</td>
+												<td>${pline.product.salesPrice }</td>
+												<td>
+													<div class="pull-right">
+														<a href='<c:url value="/purchase/product/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> 
+														<a href="" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
+													</div>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.box-footer -->
+							<div class="box-footer clearfix">
+								<a href="<c:url value="/purchase"/>"
+									class="btn btn-sm btn-danger btn-flat pull-left">Clear</a>
+								<button class="btn btn-sm btn-info btn-flat pull-right"
+									type="submit" id="action" name="action" value="next">Next</button>
+							</div>
+							<!-- /.box-footer -->
+						</form:form>
+					</div>
+					<!-- /.box -->
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row --> </section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
 
 		<!-- Main Footer -->
 		<footer class="main-footer"> <!-- To the right -->
@@ -231,7 +270,7 @@
 			href="#">Company</a>.
 		</strong> All rights reserved. </footer>
 
-		<!-- Control Sidebar -->		
+		<!-- Control Sidebar -->
 		<!-- /.control-sidebar -->
 		<!-- Add the sidebar's background. This div must be placed
            immediately after the control sidebar -->
@@ -253,17 +292,23 @@
 	<script
 		src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js"/>"></script>
 	<!-- Select2 -->
-    <script src="<c:url value="/resources/plugins/select2/select2.full.min.js"/>"></script>
+	<script
+		src="<c:url value="/resources/plugins/select2/select2.full.min.js"/>"></script>
 	<!-- InputMask -->
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.js"/>"></script>
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"/>"></script>
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.extensions.js"/>"></script>
+	<script
+		src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.js"/>"></script>
+	<script
+		src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"/>"></script>
+	<script
+		src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.extensions.js"/>"></script>
 	<script>
-      $(function () {        
-		//Datemask dd/mm/yyyy
-        $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-      });
-    </script>
+		$(function() {
+			//Datemask dd/mm/yyyy
+			$("#purchaseDate").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+		});
+	</script>
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
          user experience. Slimscroll is required when using the
