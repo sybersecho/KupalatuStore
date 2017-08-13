@@ -158,7 +158,7 @@ public class PurchaseController {
 		return "redirect:/purchase/product";
 	}
 
-	@RequestMapping(value = "/product/line/{index}", method = RequestMethod.GET)
+	@RequestMapping(value = "/select/line/{index}", method = RequestMethod.GET)
 	public String selectedProductLine(@PathVariable("index") int index, HttpSession session,
 			RedirectAttributes redirect) {
 		logger.debug("Select product info index: " + index);
@@ -173,7 +173,7 @@ public class PurchaseController {
 		return "redirect:/purchase/product";
 	}
 
-	@RequestMapping(value = "/product/delete/line/{index}", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete/line/{index}", method = RequestMethod.GET)
 	public String deleteSelectedLine(@PathVariable("index") int index, HttpSession session,
 			RedirectAttributes redirect) {
 		logger.debug("delete product line index: " + index);
