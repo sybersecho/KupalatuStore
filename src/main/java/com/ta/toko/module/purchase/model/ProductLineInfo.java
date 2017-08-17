@@ -8,16 +8,7 @@ public class ProductLineInfo {
 	private Product product;
 	private int quantity;
 	private BigDecimal purchasePrice;
-	private BigDecimal totalItem;
-	private int index;//position in list of purchased
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
+	private BigDecimal totalItem = BigDecimal.ZERO;
 
 	public Product getProduct() {
 		return product;
@@ -49,6 +40,10 @@ public class ProductLineInfo {
 
 	public void setTotalItem(BigDecimal totalItem) {
 		this.totalItem = totalItem;
+	}
+
+	public void calculateTotalItem() {
+		setTotalItem(getPurchasePrice().multiply(BigDecimal.valueOf(getQuantity())));
 	}
 
 }

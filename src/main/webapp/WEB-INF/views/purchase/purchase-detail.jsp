@@ -150,6 +150,7 @@
 		                <c:url var="action" value="${actionUrl}"/>
 		                <form:form method="POST" modelAttribute="purchased"  action="${action}" cssClass="form-horizontal">
 		                <div class="box-body">
+		                	<form:hidden path="totalPurchased"/>
 		                	<spring:bind path="purchaseNo">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 	                    		<form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>

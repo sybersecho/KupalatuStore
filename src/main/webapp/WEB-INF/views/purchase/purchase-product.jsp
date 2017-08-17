@@ -135,7 +135,8 @@
 						<c:url var="action" value="${actionUrl}" />
 						<form:form method="POST" commandName="productLine" action="${action}" cssClass="form-horizontal">
 							<div class="box-body">
-								<form:hidden path="index" />
+								<input type="hidden" value="${index }" name="index"/>
+								<form:hidden path="totalItem"/>
 								<spring:bind path="product.id">
 									<form:hidden path="product.id" />
 									<c:if test="${status.error }">

@@ -1,6 +1,7 @@
 package com.ta.toko.module.purchase.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ public class PurchaseInfo implements Serializable {
 	private Date purchaseDate;
 	private Supplier supplier;
 	private String details;
+	private BigDecimal totalPurchased = BigDecimal.ZERO;
 	private List<ProductLineInfo> productLineInfos = new ArrayList<ProductLineInfo>();
 
 	public PurchaseInfo() {
@@ -89,8 +91,37 @@ public class PurchaseInfo implements Serializable {
 		return builder.toString();
 	}
 
-	public void addProduct() {
+	public void addLineInfo(ProductLineInfo lineInfo) {
+		addTotalPurchase(lineInfo.getTotalItem());
+		productLineInfos.add(lineInfo);
+	}
 
+	public void removeLineAt(int index) {
+		subtractTotalPurchase(productLineInfos.get(index).getTotalItem());
+		productLineInfos.remove(index);
+	}
+
+	public void addLineAt(int index, ProductLineInfo lineInfo) {
+		addTotalPurchase(lineInfo.getTotalItem());
+		productLineInfos.add(index, lineInfo);
+	}
+
+	private void addTotalPurchase(BigDecimal totalItem) {
+		BigDecimal total = getTotalPurchased().add(totalItem);
+		setTotalPurchased(total);
+	}
+
+	private void subtractTotalPurchase(BigDecimal with) {
+		BigDecimal total = getTotalPurchased().subtract(with);
+		setTotalPurchased(total);
+	}
+
+	public BigDecimal getTotalPurchased() {
+		return totalPurchased;
+	}
+
+	public void setTotalPurchased(BigDecimal totalPurchased) {
+		this.totalPurchased = totalPurchased;
 	}
 
 }
