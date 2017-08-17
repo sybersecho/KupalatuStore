@@ -2,9 +2,7 @@ package com.ta.toko.module.purchase.web;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,6 +30,7 @@ import com.ta.toko.module.purchase.model.ProductLineInfo;
 import com.ta.toko.module.purchase.model.PurchaseConstant;
 import com.ta.toko.module.purchase.model.PurchaseInfo;
 import com.ta.toko.module.purchase.model.PurchaseSessionUtil;
+import com.ta.toko.util.SessionUtil;
 
 @Controller
 @SessionAttributes(PurchaseConstant.SESSION_NAME)
@@ -82,7 +81,7 @@ public class PurchaseController {
 		detailValidator.validate(purchase, result);
 		if (result.hasErrors()) {
 			model.addAttribute("suppliers", suppliers);
-			print(model, request, null);
+			SessionUtil.print(model, request, null);
 			return "purchase/purchase-detail";
 		}
 
@@ -102,6 +101,13 @@ public class PurchaseController {
 		if (!model.containsAttribute("actionUrl")) {
 			model.addAttribute("actionUrl", "/purchase/next/confirm");
 		}
+		logger.debug("**** Before ***");
+		SessionUtil.print(model, null, session);
+		if (session.getAttribute("productLine") != null) {
+			session.removeAttribute("productLine");
+		}
+		logger.debug("**** After ***");
+		SessionUtil.print(model, null, session);
 
 		return "purchase/purchase-product";
 	}
@@ -111,7 +117,7 @@ public class PurchaseController {
 			@ModelAttribute("productLine") ProductLineInfo productLine, BindingResult result, HttpSession session,
 			RedirectAttributes redirectModel, Model model, HttpServletRequest request) {
 		logger.debug("Show result search products page");
-
+		int index = (int) (request.getParameter("index") == "" ? -1 : Integer.parseInt(request.getParameter("index")));
 		if (action.equals("search")) {
 			logger.debug("action is search");
 			productSearchValidator.validate(productLine, result);
@@ -120,7 +126,9 @@ public class PurchaseController {
 			}
 			// TODO CALL SERVICE TO RETRIEVE PRODUCT BASE ON CRITERIA
 			model.addAttribute("products", products);
+			model.addAttribute("index", index);
 			model.addAttribute("productLine", productLine);
+			session.setAttribute("productLine", productLine);
 			return "purchase/search-product";
 		} else if (action.equals("add")) {
 			logger.debug("action is add");
@@ -135,8 +143,7 @@ public class PurchaseController {
 			// calculatedTotal(productLine);
 			productLine.calculateTotalItem();
 			logger.debug("Line total item: " + productLine.getTotalItem());
-			int index = (int) (request.getParameter("index") == "" ? -1
-					: Integer.parseInt(request.getParameter("index")));
+
 			addProductLineToPurchase(p, productLine, index - 1);
 			// p.getProductLineInfos().add(productLine);
 			productLine = new ProductLineInfo();
@@ -149,17 +156,29 @@ public class PurchaseController {
 	}
 
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
-	public String selectedProduct(HttpSession session, @PathVariable Long id,
-			@ModelAttribute("productLine") ProductLineInfo productLine, BindingResult result,
+	public String selectedProduct(HttpSession session, @PathVariable Long id, @RequestParam("index") int index,
 			RedirectAttributes model) {
 		logger.debug("product with Id " + id + " selected");
+		ProductLineInfo pInfo = (ProductLineInfo) session.getAttribute("productLine");
+		logger.debug("pInfo before: " + pInfo.toString());
+
+		// logger.debug(productLine.toString());
 		// get product by id selected:
 		Product p = getById(id);
 		// show selected product on screen
-		logger.debug("Prod id: " + p.getId());
-		productLine.setProduct(p);
-		model.addFlashAttribute("productLine", productLine);
+		logger.debug("Product id: " + p.getId());
+		p.setSalesPrice(pInfo.getProduct().getSalesPrice());
+		pInfo.setProduct(p);
+		logger.debug("pInfo after: " + pInfo.toString());
+		// productLine.setProduct(p);
+		// logger.debug(productLine.toString());
+
+		model.addFlashAttribute("productLine", pInfo);
 		model.addFlashAttribute("actionUrl", "/purchase/next/confirm");
+		model.addFlashAttribute("index", index);
+		if (session.getAttribute("productLine") != null) {
+			session.removeAttribute("productLine");
+		}
 		return "redirect:/purchase/product";
 	}
 
@@ -200,9 +219,8 @@ public class PurchaseController {
 		// check if index is not 0
 		logger.debug("Index value " + index);
 		if (index >= 0) {
-			purchased.removeLineAt(index);
 			logger.debug("Current Total Purchased: " + purchased.getTotalPurchased());
-			purchased.addLineAt(index, productLine);
+			purchased.updateLineAt(index, productLine);
 			logger.debug("Total Item: " + productLine.getTotalItem());
 			logger.debug("Total Purchased: " + purchased.getTotalPurchased());
 		} else {
@@ -257,38 +275,6 @@ public class PurchaseController {
 			p.setSalesPrice(BigDecimal.ZERO);
 
 			products.add(p);
-		}
-	}
-
-	@SuppressWarnings({ "rawtypes" })
-	private void print(Model model, HttpServletRequest request, HttpSession session) {
-		if (model != null) {
-			logger.debug("model data");
-			Map modelMap = model.asMap();
-			for (Object modelKey : modelMap.keySet()) {
-				Object modelValue = modelMap.get(modelKey);
-				logger.debug(modelKey + " -- " + modelValue);
-			}
-		}
-
-		if (request != null) {
-			logger.debug("=== Request data ===");
-			Enumeration<String> reqEnum = request.getAttributeNames();
-			while (reqEnum.hasMoreElements()) {
-				String s = reqEnum.nextElement();
-				logger.debug(s);
-				logger.debug("==" + request.getAttribute(s));
-			}
-		}
-
-		if (session != null) {
-			logger.debug("*** Session data ***");
-			Enumeration<String> e = session.getAttributeNames();
-			while (e.hasMoreElements()) {
-				String s = e.nextElement();
-				logger.debug(s);
-				logger.debug("**" + session.getAttribute(s));
-			}
 		}
 	}
 }

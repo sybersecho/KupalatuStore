@@ -46,4 +46,16 @@ public class ProductLineInfo {
 		setTotalItem(getPurchasePrice().multiply(BigDecimal.valueOf(getQuantity())));
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Product: " + (product == null ? "null" : product.getId()));
+		builder.append(", ");
+		builder.append("Quantity: " + quantity);
+		builder.append(", ");
+		builder.append("Purchase Price: " + purchasePrice);
+		builder.append(", ");
+		builder.append("total Item: " + totalItem);
+		return builder.toString();
+	}
 }

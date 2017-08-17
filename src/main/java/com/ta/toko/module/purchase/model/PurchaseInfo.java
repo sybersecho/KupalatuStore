@@ -100,6 +100,11 @@ public class PurchaseInfo implements Serializable {
 		subtractTotalPurchase(productLineInfos.get(index).getTotalItem());
 		productLineInfos.remove(index);
 	}
+	
+	public void updateLineAt(int index, ProductLineInfo updatedLine) {
+		removeLineAt(index);
+		addLineAt(index, updatedLine);
+	}
 
 	public void addLineAt(int index, ProductLineInfo lineInfo) {
 		addTotalPurchase(lineInfo.getTotalItem());

@@ -156,13 +156,13 @@
                       			</tr>
                     			</thead>
                     			<tbody>
-                    				<c:forEach var="product" items="${products }" varStatus="index">
+                    				<c:forEach var="product" items="${products }" varStatus="i">
                     				<tr>
-                    					<td>${index.count }</td>
+                    					<td>${i.count }</td>
 				                      	<td>${product.barcode }</td>
 				                      	<td>${product.name }</td>
 				                      	<td>
-				                              <a href="<c:url value="/purchase/product/${product.id}"/>" class="btn btn-warning"><i class="fa fa-pencil">Select</i></a>
+				                              <a href="<c:url value="/purchase/product/${product.id}?index=${index }"/>" class="btn btn-warning"><i class="fa fa-pencil">Select</i></a>
 				                         </td>
                     				</tr>
 				                    </c:forEach>
