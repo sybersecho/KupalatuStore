@@ -11,9 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.ta.toko.entity.Supplier;
 
-//@Component
-//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = WebApplicationContext.SCOPE_SESSION)
-// @Scope("session")
 public class PurchaseInfo implements Serializable {
 
 	private static Logger logger = LoggerFactory.getLogger(PurchaseInfo.class);
@@ -100,7 +97,7 @@ public class PurchaseInfo implements Serializable {
 		subtractTotalPurchase(productLineInfos.get(index).getTotalItem());
 		productLineInfos.remove(index);
 	}
-	
+
 	public void updateLineAt(int index, ProductLineInfo updatedLine) {
 		removeLineAt(index);
 		addLineAt(index, updatedLine);

@@ -2,6 +2,7 @@ package com.ta.toko.module.purchase.web;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,13 +102,6 @@ public class PurchaseController {
 		if (!model.containsAttribute("actionUrl")) {
 			model.addAttribute("actionUrl", "/purchase/next/confirm");
 		}
-		logger.debug("**** Before ***");
-		SessionUtil.print(model, null, session);
-		if (session.getAttribute("productLine") != null) {
-			session.removeAttribute("productLine");
-		}
-		logger.debug("**** After ***");
-		SessionUtil.print(model, null, session);
 
 		return "purchase/purchase-product";
 	}
@@ -128,6 +122,7 @@ public class PurchaseController {
 			model.addAttribute("products", products);
 			model.addAttribute("index", index);
 			model.addAttribute("productLine", productLine);
+			// put current selected info into session
 			session.setAttribute("productLine", productLine);
 			return "purchase/search-product";
 		} else if (action.equals("add")) {
@@ -135,24 +130,48 @@ public class PurchaseController {
 
 			productAddValidator.validate(productLine, result);
 			if (result.hasErrors()) {
-				// print(model, request, session);
 				return "purchase/purchase-product";
 			}
 
-			PurchaseInfo p = PurchaseSessionUtil.getPurchaseInSession(session);
-			// calculatedTotal(productLine);
+			PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
 			productLine.calculateTotalItem();
 			logger.debug("Line total item: " + productLine.getTotalItem());
+			if (index > 0) {
+				purchased.updateLineAt(index - 1, productLine);
+			} else {
+				purchased.addLineInfo(productLine);
+			}
 
-			addProductLineToPurchase(p, productLine, index - 1);
-			// p.getProductLineInfos().add(productLine);
-			productLine = new ProductLineInfo();
 			redirectModel.addFlashAttribute("productLine", new ProductLineInfo());
-			redirectModel.addFlashAttribute(PurchaseConstant.SESSION_NAME, p);
+			redirectModel.addFlashAttribute(PurchaseConstant.SESSION_NAME, purchased);
 			redirectModel.addFlashAttribute("actionUrl", "/purchase/next/confirm");
 			return "redirect:/purchase/product";
 		}
-		return "purchase/search-product";
+		return "redirect:/purchase/confirm";
+	}
+
+	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
+	public String confirmPurchased(Model model, HttpSession session) {
+		logger.debug("Confirmation page show");
+		supplierDummies();
+		PurchaseInfo purchase = new PurchaseInfo();
+		purchase.setPurchaseNo("123456789");
+		purchase.setPurchaseDate(new Date());
+		purchase.setDetails("test detail");
+		for (int i = 0; i < 5; i++) {
+			ProductLineInfo productLine = new ProductLineInfo();
+			productLine.setProduct(products.get(i));
+			productLine.setPurchasePrice(BigDecimal.valueOf(1000).multiply(BigDecimal.valueOf((i + 1))));
+			productLine.setQuantity((i + 1) * 3);
+			productLine.setTotalItem(
+					productLine.getPurchasePrice().multiply(BigDecimal.valueOf(productLine.getQuantity())));
+			purchase.getProductLineInfos().add(productLine);
+
+		}
+
+		model.addAttribute("supplier", suppliers.get(0));
+		model.addAttribute("purchased", purchase);
+		return "purchase/confirmed";
 	}
 
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
@@ -162,23 +181,21 @@ public class PurchaseController {
 		ProductLineInfo pInfo = (ProductLineInfo) session.getAttribute("productLine");
 		logger.debug("pInfo before: " + pInfo.toString());
 
-		// logger.debug(productLine.toString());
+		// TODO SERVICE SHOULD CALL A METHOD TO RETRIVE A PRODUCT
 		// get product by id selected:
 		Product p = getById(id);
 		// show selected product on screen
 		logger.debug("Product id: " + p.getId());
 		p.setSalesPrice(pInfo.getProduct().getSalesPrice());
 		pInfo.setProduct(p);
-		logger.debug("pInfo after: " + pInfo.toString());
-		// productLine.setProduct(p);
-		// logger.debug(productLine.toString());
 
 		model.addFlashAttribute("productLine", pInfo);
 		model.addFlashAttribute("actionUrl", "/purchase/next/confirm");
 		model.addFlashAttribute("index", index);
-		if (session.getAttribute("productLine") != null) {
-			session.removeAttribute("productLine");
-		}
+
+		// remove selected product info from session
+		session.removeAttribute("productLine");
+
 		return "redirect:/purchase/product";
 	}
 
@@ -203,33 +220,15 @@ public class PurchaseController {
 			RedirectAttributes redirect) {
 		logger.debug("delete product line index: " + index);
 		// get purchased
-		PurchaseInfo pInfo = PurchaseSessionUtil.getPurchaseInSession(session);
+		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
 		// get product line info
-		logger.debug("Current Total Purchased: " + pInfo.getTotalPurchased());
-		pInfo.removeLineAt(index - 1);
-		logger.debug("Current Total Purchased: " + pInfo.getTotalPurchased());
-		// pInfo.getProductLineInfos().remove(index - 1);
+		logger.debug("Current Total Purchased: " + purchased.getTotalPurchased());
+		purchased.removeLineAt(index - 1);
+		logger.debug("Current Total Purchased: " + purchased.getTotalPurchased());
 
 		redirect.addFlashAttribute("productLine", new ProductLineInfo());
 		redirect.addFlashAttribute("actionUrl", "/purchase/next/confirm");
 		return "redirect:/purchase/product";
-	}
-
-	private void addProductLineToPurchase(PurchaseInfo purchased, ProductLineInfo productLine, int index) {
-		// check if index is not 0
-		logger.debug("Index value " + index);
-		if (index >= 0) {
-			logger.debug("Current Total Purchased: " + purchased.getTotalPurchased());
-			purchased.updateLineAt(index, productLine);
-			logger.debug("Total Item: " + productLine.getTotalItem());
-			logger.debug("Total Purchased: " + purchased.getTotalPurchased());
-		} else {
-			logger.debug("Current Total Purchased: " + purchased.getTotalPurchased());
-			purchased.addLineInfo(productLine);
-			logger.debug("Total Item: " + productLine.getTotalItem());
-			logger.debug("Total Purchased: " + purchased.getTotalPurchased());
-		}
-
 	}
 
 	private Product getById(Long id) {
@@ -256,6 +255,7 @@ public class PurchaseController {
 			addr.setId(Long.valueOf(i));
 			addr.setCity("City " + i);
 			addr.setLine1("Line 1 " + i);
+			addr.setState("State " + i);
 
 			s.setSupplierAddress(addr);
 			suppliers.add(s);
@@ -271,6 +271,7 @@ public class PurchaseController {
 			p.setDescription("Description of " + i);
 			p.setId(Long.valueOf(i));
 			p.setName("Name " + i);
+			p.setUnit("Unit " + i);
 			p.setQuantity(0);
 			p.setSalesPrice(BigDecimal.ZERO);
 
