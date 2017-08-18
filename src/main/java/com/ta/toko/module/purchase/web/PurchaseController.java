@@ -2,7 +2,6 @@ package com.ta.toko.module.purchase.web;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,7 +92,7 @@ public class PurchaseController {
 	}
 
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
-	public String showInputProductPage(Model model, HttpSession session) {
+	public String showInputProductPage(Model model, HttpSession session, HttpServletRequest request) {
 		logger.debug("Show product details");
 		if (!model.containsAttribute("productLine")) {
 			model.addAttribute("productLine", new ProductLineInfo());
@@ -102,7 +101,7 @@ public class PurchaseController {
 		if (!model.containsAttribute("actionUrl")) {
 			model.addAttribute("actionUrl", "/purchase/next/confirm");
 		}
-
+		SessionUtil.print(model, request, session);
 		return "purchase/purchase-product";
 	}
 
@@ -153,11 +152,10 @@ public class PurchaseController {
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
 	public String confirmPurchased(Model model, HttpSession session) {
 		logger.debug("Confirmation page show");
-		supplierDummies();
-		PurchaseInfo purchase = new PurchaseInfo();
-		purchase.setPurchaseNo("123456789");
-		purchase.setPurchaseDate(new Date());
-		purchase.setDetails("test detail");
+		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
+		/*purchased.setPurchaseNo("123456789");
+		purchased.setPurchaseDate(new Date());
+		purchased.setDetails("test detail");
 		for (int i = 0; i < 5; i++) {
 			ProductLineInfo productLine = new ProductLineInfo();
 			productLine.setProduct(products.get(i));
@@ -165,12 +163,12 @@ public class PurchaseController {
 			productLine.setQuantity((i + 1) * 3);
 			productLine.setTotalItem(
 					productLine.getPurchasePrice().multiply(BigDecimal.valueOf(productLine.getQuantity())));
-			purchase.getProductLineInfos().add(productLine);
+			purchased.getProductLineInfos().add(productLine);
 
-		}
+		}*/
 
-		model.addAttribute("supplier", suppliers.get(0));
-		model.addAttribute("purchased", purchase);
+		model.addAttribute("supplier", purchased.getSupplier());
+		model.addAttribute("purchased", purchased);
 		return "purchase/confirmed";
 	}
 

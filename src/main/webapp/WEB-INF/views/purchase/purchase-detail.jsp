@@ -173,7 +173,7 @@
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 	                    		<form:label path="supplier.id" cssClass="col-sm-2 control-label">Supplier</form:label>
                       			<div class="col-sm-10">
-                        			<form:select path="supplier.id" cssClass="form-control select2" style="width: 100%;">
+                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;">
                         				<form:options items="${suppliers }" itemValue="id" itemLabel="name" />
                         			</form:select>
 	                      		</div>
