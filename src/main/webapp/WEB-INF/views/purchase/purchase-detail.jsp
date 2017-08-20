@@ -169,12 +169,15 @@
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
-	                    	<spring:bind path="supplier.id">
+	                    	<spring:bind path="supplier">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="supplier.id" cssClass="col-sm-2 control-label">Supplier</form:label>
+	                    		<form:label path="supplier" cssClass="col-sm-2 control-label">Supplier</form:label>
                       			<div class="col-sm-10">
-                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;">
-                        				<form:options items="${suppliers }" itemValue="id" itemLabel="name" />
+                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;" >
+                        				<form:options items="${suppliers }" itemValue="id"  itemLabel="name" />
+                        				<%-- <c:forEach items="${suppliers }" var="s">
+                        					<form:option value="${s.id }"/>
+                        				</c:forEach> --%>
                         			</form:select>
 	                      		</div>
 	                    	</div>

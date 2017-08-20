@@ -77,8 +77,8 @@ public class PurchaseInfo implements Serializable {
 		builder.append(", ");
 		builder.append("Details: " + this.details);
 		builder.append(", ");
-		builder.append("Supplier: " + (this.supplier == null ? "null" : this.supplier.getName()));
-		if (this.productLineInfos != null || !this.productLineInfos.isEmpty()) {
+		builder.append("Supplier.: " + (this.supplier == null ? ("id is " + supplier.getId()) : this.supplier.getId()));
+		if (this.productLineInfos != null && !this.productLineInfos.isEmpty()) {
 			for (ProductLineInfo productLineInfo : productLineInfos) {
 				builder.append("\n\tProduct: " + productLineInfo.getProduct().getName());
 				builder.append(", ");

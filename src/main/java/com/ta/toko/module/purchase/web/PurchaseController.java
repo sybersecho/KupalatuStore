@@ -101,7 +101,16 @@ public class PurchaseController {
 		if (!model.containsAttribute("actionUrl")) {
 			model.addAttribute("actionUrl", "/purchase/next/confirm");
 		}
+
+		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
+		if (purchased.getSupplier().getId() != null) {
+			long supplierId = purchased.getSupplier().getId();
+			purchased.setSupplier(findSupplier(supplierId));
+			;
+		}
+
 		SessionUtil.print(model, request, session);
+
 		return "purchase/purchase-product";
 	}
 
@@ -111,6 +120,7 @@ public class PurchaseController {
 			RedirectAttributes redirectModel, Model model, HttpServletRequest request) {
 		logger.debug("Show result search products page");
 		int index = (int) (request.getParameter("index") == "" ? -1 : Integer.parseInt(request.getParameter("index")));
+		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
 		if (action.equals("search")) {
 			logger.debug("action is search");
 			productSearchValidator.validate(productLine, result);
@@ -132,7 +142,6 @@ public class PurchaseController {
 				return "purchase/purchase-product";
 			}
 
-			PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
 			productLine.calculateTotalItem();
 			logger.debug("Line total item: " + productLine.getTotalItem());
 			if (index > 0) {
@@ -146,6 +155,14 @@ public class PurchaseController {
 			redirectModel.addFlashAttribute("actionUrl", "/purchase/next/confirm");
 			return "redirect:/purchase/product";
 		}
+
+		logger.debug("Action is submit");
+
+		if (purchased.getProductLineInfos().isEmpty()) {
+			redirectModel.addFlashAttribute("isEmpty", true);
+			return "redirect:/purchase/product";
+		}
+
 		return "redirect:/purchase/confirm";
 	}
 
@@ -153,19 +170,6 @@ public class PurchaseController {
 	public String confirmPurchased(Model model, HttpSession session) {
 		logger.debug("Confirmation page show");
 		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
-		/*purchased.setPurchaseNo("123456789");
-		purchased.setPurchaseDate(new Date());
-		purchased.setDetails("test detail");
-		for (int i = 0; i < 5; i++) {
-			ProductLineInfo productLine = new ProductLineInfo();
-			productLine.setProduct(products.get(i));
-			productLine.setPurchasePrice(BigDecimal.valueOf(1000).multiply(BigDecimal.valueOf((i + 1))));
-			productLine.setQuantity((i + 1) * 3);
-			productLine.setTotalItem(
-					productLine.getPurchasePrice().multiply(BigDecimal.valueOf(productLine.getQuantity())));
-			purchased.getProductLineInfos().add(productLine);
-
-		}*/
 
 		model.addAttribute("supplier", purchased.getSupplier());
 		model.addAttribute("purchased", purchased);
@@ -258,6 +262,15 @@ public class PurchaseController {
 			s.setSupplierAddress(addr);
 			suppliers.add(s);
 		}
+	}
+
+	private Supplier findSupplier(long id) {
+		for (Supplier s : suppliers) {
+			if (s.getId() == id) {
+				return s;
+			}
+		}
+		return null;
 	}
 
 	private List<Product> products = new ArrayList<Product>();

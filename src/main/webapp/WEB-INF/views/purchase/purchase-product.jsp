@@ -198,22 +198,23 @@
 									</div>
 								</spring:bind>
 								<div class="pull-right">
-									<button class="btn btn-primary btn-sm" type="submit"
-										id="action" name="action" value="search">
+									<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="search">
 										<i class="fa fa-search"></i> Search
 									</button>
-									<button class="btn btn-primary btn-sm" type="submit"
-										id="action" name="action" value="add">
+									<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="add">
 										<i class="fa fa-plus-square"></i> Add
 									</button>
 								</div>
-							</div>
-							<!-- /.box-body -->
+							</div><!-- /.box-body -->
 							<div class="box-header with-border">
+								<c:if test="${isEmpty}">
+									<div class="alert alert-warning alert-dismissable">
+										Please add product info
+									</div>
+								</c:if>
 								<h3 class="box-title">Product Detail</h3>
-							</div>
-							<!-- /.box-header -->
-							<div class="box-body table-responsive">
+							</div><!-- /.box-header -->
+							<div class="box-body table-responsive">								
 								<table id="product" class="table table-striped">
 									<thead>
 										<tr>
@@ -247,10 +248,8 @@
 							</div>
 							<!-- /.box-footer -->
 							<div class="box-footer clearfix">
-								<a href="<c:url value="/purchase"/>"
-									class="btn btn-sm btn-danger btn-flat pull-left">Clear</a>
-								<button class="btn btn-sm btn-info btn-flat pull-right"
-									type="submit" id="action" name="action" value="next">Next</button>
+								<a href="<c:url value="/purchase"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a>
+								<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="action" name="action" value="next">Next</button>
 							</div>
 							<!-- /.box-footer -->
 						</form:form>
