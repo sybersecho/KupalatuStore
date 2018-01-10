@@ -124,6 +124,11 @@
 				<a href="<c:url value="/purchase"/>"> 
 					<i class="fa fa-opencart"></i> <span>Purchase</span>
 				</a>
+			</li>
+			<li>
+				<a href="<c:url value="/sales"/>"> <i
+					class="fa fa-opencart"></i> <span>Sales</span>
+				</a>
 			</li>		
           </ul><!-- /.sidebar-menu -->
         </section>

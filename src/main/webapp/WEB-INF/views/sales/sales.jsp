@@ -114,14 +114,12 @@
 			<li><a href="<c:url value="/product"/>"> <i
 					class="fa fa-barcode"></i> <span>Manage Product</span>
 			</a></li>
-			<li class="active"><a href="<c:url value="/purchase"/>"> <i
+			<li><a href="<c:url value="/purchase"/>"> <i
 					class="fa fa-opencart"></i> <span>Purchase</span>
 			</a></li>
-			<li>
-				<a href="<c:url value="/sales"/>"> <i
+			<li class="active"><a href="<c:url value="/sales"/>"> <i
 					class="fa fa-opencart"></i> <span>Sales</span>
-				</a>
-			</li>
+			</a></li>
 		</ul>
 		<!-- /.sidebar-menu --> </section> <!-- /.sidebar --> </aside>
 
@@ -129,94 +127,151 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-			<h1>Purchase Information</h1>
+			<h1>Sales Information</h1>
 			</section>
 
 			<!-- Main content -->
-			<section class="invoice">
-				<!-- title row -->
-				<div class="row">
-		            <div class="col-xs-12">
-		              <h2 class="page-header">
-		                <i class="fa fa-globe"></i> Kupalatu Store.
-		                <small class="pull-right">Date: ${purchased.purchaseDate }</small>
-		              </h2>
-		            </div><!-- /.col -->
-	         	 </div>
-	         	 <!-- info row -->
-		         <div class="row invoice-info">
-		         	<div class="col-sm-8 invoice-col">
-			           	From
-			           	<address>
-			          	<strong>${supplier.name }.</strong><br>
-			                ${supplier.supplierAddress.line1}<br>
-			                ${supplier.supplierAddress.city },${supplier.supplierAddress.state }, ${supplier.supplierAddress.postCode }<br>
-			                Phone:  ${supplier.contact }<br>
-			                Email: ${supplier.email }
-			           	</address>
-		            </div><!-- /.col -->
-		            <div class="col-sm-4 invoice-col">
-		              <b>Purchase Number #${purchased.purchaseNo }</b><br>
-		            </div><!-- /.col -->
-		          </div><!-- /.row -->
-		          <!-- Table row -->
-          		<div class="row">
-          			<div class="col-xs-12 table-responsive">
-          				<table class="table table-striped">
-			          		<thead>
-			                  <tr>
-			                    <th>Product</th>
-			                    <th>Unit</th>
-			                    <th>Qty</th>
-			                    <th>Price</th>
-			                    <th>Subtotal</th>
-			                  </tr>
-			                </thead>
-			                <tbody>
-			                	<c:forEach items="${purchased.productLineInfos}" var="productLine">
-			                	<tr>
-					         		<td>${productLine.product.name }</td>
-					               	<td>${productLine.product.unit }</td>
-					            	<td>${productLine.quantity }</td>
-					             	<td>${productLine.purchasePrice }</td>
-					            	<td>${productLine.totalItem }</td>
-				           		</tr>
-			                	</c:forEach>							   	
-			                </tbody>
-          				</table>
-          			</div>
-          		</div><!-- /.row -->
-          		<div class="row">
-          			<div class="col-xs-6">
-          				<p class="lead">Details:</p>
-          				<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                			${purchased.details }
-           				</p>
-          			</div><!-- /.col -->
-          			<div class="col-xs-6">
-          				<p class="lead">Purchase Payment</p>
-          				<div class="table-responsive">
-          					<table class="table">
-          						<tr>
-                 					<th style="width:50%">Total:</th>
-                 					<td>${purchased.totalPurchased}</td>
-                				</tr>
-          					</table>
-          				</div>
-          			</div><!-- /.col -->
-          		</div><!-- /.row -->
-          		<div class="row">
-          			<div class="col-xs-12">          				
+			<section class="content">
+			<div class="row">
+				<div class="col-md-12">
+					
+					<div class="box box-info">
+					<div class="box-header with-border">
+						<h3 class="box-title">Product Detail</h3>
+						</div><!-- /.box-header -->
+						<%-- <c:url var="action" value="${actionUrl}" /> --%>
+						<form:form method="POST" commandName="sale" cssClass="form-horizontal">
+						<div class="col-xs-6">
+						<div class="box-body">
+							<div class="form-group">
+								<label for="No" class="col-sm-2 control-label">No</label>
+								<div class="col-sm-10">
+									<input type="no" class="form-control" id="No" placeholder="No">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="Date" class="col-sm-2 control-label">Date</label>
+								<div class="col-sm-10">
+									<input type="salesDate" class="form-control" id="salesDate" placeholder="Date">
+								</div>
+							</div>
+						</div><!-- /.box-body -->
+						</div>
+						<div class="col-xs-6">
+						
+						<div class="box-body">
+							<c:url var="search" value="/search"/>
+							<%-- <form:form method="POST" commandName="product" action="${search}" cssClass="form-horizontal"> --%>						
+							<spring:bind path="editedProduct.product.barcode">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">								
+								<form:label path="editedProduct.product.barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
+								<div class="col-sm-8">
+									<form:input path="editedProduct.product.barcode" cssClass="form-control" placeholder="Barcode"/>
+									<form:errors path="editedProduct.product.barcode" class="control-label" />
+	                      		</div>
+								<div class="col-sm-2">
+								<div class="pull-right">
+								<button class="btn btn-primary" type="submit" id="action" name="action" value="search">
+										<i class="fa fa-search"></i> Search
+									</button></div>
+								</div>
+							</div>
+							</spring:bind>
+							<spring:bind path="editedProduct.product.name">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="editedProduct.product.name" cssClass="col-sm-2 control-label">Name</form:label>
+                      			<div class="col-sm-10">
+                      				<form:input path="editedProduct.product.name" cssClass="form-control" placeholder="Name"/>
+                      				<form:errors path="editedProduct.product.name" class="control-label" />
+	                      		</div>
+							</div>
+							</spring:bind>
+							
+							
+							<div class="form-group">
+								<form:label path="editedProduct.product.salesPrice" cssClass="col-sm-2 control-label">Price</form:label>
+								<!-- <label for="Price" class="col-sm-2 control-label">Price</label> -->
+								<div class="col-sm-4">
+									<form:input path="editedProduct.product.salesPrice" cssClass="form-control disabled" placeholder="Price"/>
+									
+								</div>
+								<form:label path="editedProduct.quantity" cssClass="col-sm-2 control-label">Quantity</form:label>
+								<!-- <label for="Quantity" class="col-sm-2 control-label">Quantity</label> -->
+								<div class="col-sm-4">
+									<form:input path="editedProduct.quantity" cssClass="form-control" placeholder="Quantity"/>
+									<!-- <input type="Quantity" class="form-control" id="Quantity" placeholder="Quantity"> -->
+								</div>
+							</div>
+							<div class="pull-right">
+							<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="add">
+										<i class="fa fa-plus-square"></i> Add
+									</button>
+							</div>
+						</div><!-- /.box-body -->
+						</div>
+						<div class="box-body table-responsive">	
+						<form:hidden path="productLines"/>
+						<table id="product" class="table table-striped">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Quantity</th>
+									<th>Price</th>
+									<th>Sub Total</th>
+									<th style="width: 100px"></th>
+								</tr>
+							</thead>
+							<tbody>								
+								<c:forEach var="line" items="${sale.productLines}" varStatus="index">
+								<tr>
+									<td>${line.product.name }</td>
+									<td>${line.quantity }</td>
+									<td>${line.product.salesPrice }</td>
+									<td>${line.subTotal }</td>
+									
+									<td>
+										<div class="pull-right">
+											<a href='<c:url value="/sales/select/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+											<a href='<c:url value="/sales/delete/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
+										</div>
+									</td>
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+						
+						</div><!-- /.box-body -->
+						<div class="box-body">
+							<div class="col-xs-6 col-xs-offset-6">
+								<p class="lead">Sales Payment</p>
+								<div class="table-responsive">
+	          					<table class="table">
+	          						<tr>
+	                 					<th style="width:50%">Total:</th>
+	                 					<td>${sale.totalSales }</td>
+	                				</tr>
+	          					</table>
+	          				</div>
+							</div>
+						</div><!-- /.box-body -->
+						<div class="box-body">
+							<div class="col-xs-12">          				
           				<c:url value="/purchase/submit" var="submit"/>
           				<form action="${submit }" method="post">
           					<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-          					<button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
           				</form>           				
           			</div>
-          		</div><!-- /.row -->
-			</section><!-- /.content -->
-			<div class="clearfix"></div>
-		</div><!-- /.content-wrapper -->
+						</div>
+						</form:form>
+					</div>
+					<!-- /.box -->
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row --> </section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
 
 		<!-- Main Footer -->
 		<footer class="main-footer"> <!-- To the right -->
@@ -259,7 +314,7 @@
 	<script>
 		$(function() {
 			//Datemask dd/mm/yyyy
-			$("#purchaseDate").inputmask("dd/mm/yyyy", {
+			$("#salesDate").inputmask("dd/mm/yyyy", {
 				"placeholder" : "dd/mm/yyyy"
 			});
 		});

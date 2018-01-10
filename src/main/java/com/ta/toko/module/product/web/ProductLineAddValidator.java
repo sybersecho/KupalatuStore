@@ -33,6 +33,21 @@ public class ProductLineAddValidator implements Validator {
 			logger.debug("product has not been selected");
 			errors.rejectValue("product.id", "search.purchase.product");
 		}
+		
+		if(productLine.getQuantity() <= 0 ) {
+			logger.debug("product quantity below 0");
+			errors.rejectValue("quantity", "NotBelowZero.purchase.quantity");
+		}
+		
+		if(productLine.getPurchasePrice() != null && productLine.getPurchasePrice().intValue() <= 0 ) {
+			logger.debug("purchasePrice below 0");
+			errors.rejectValue("quantity", "NotBelowZero.purchase.purchasePrice");
+		}
+		
+		if(productLine.getProduct().getSalesPrice() != null && productLine.getProduct().getSalesPrice().intValue() <= 0) {
+			logger.debug("salesPrice below 0");
+			errors.rejectValue("product.salesPrice", "NotBelowZero.purchase.product.salesPrice");
+		}
 
 	}
 

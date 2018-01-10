@@ -1,6 +1,5 @@
 package com.ta.toko.module.purchase.web;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +21,17 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ta.toko.entity.Address;
 import com.ta.toko.entity.Product;
 import com.ta.toko.entity.Supplier;
+import com.ta.toko.module.product.ProductCriteria;
+import com.ta.toko.module.product.ProductService;
 import com.ta.toko.module.product.web.ProductLineAddValidator;
 import com.ta.toko.module.purchase.model.ProductLineInfo;
 import com.ta.toko.module.purchase.model.PurchaseConstant;
 import com.ta.toko.module.purchase.model.PurchaseInfo;
 import com.ta.toko.module.purchase.model.PurchaseSessionUtil;
+import com.ta.toko.module.supplier.SupplierService;
+import com.ta.toko.test.dummy.SupplierDummies;
 import com.ta.toko.util.SessionUtil;
 
 @Controller
@@ -44,11 +46,20 @@ public class PurchaseController {
 	ProductLineSearchValidator productSearchValidator;
 	@Autowired
 	ProductLineAddValidator productAddValidator;
+	@Autowired
+	SupplierDummies dummies;
+	@Autowired
+	private SupplierService supplierService;
+	@Autowired
+	private ProductService productService;
+	
+	List<Supplier> suppliers = new ArrayList<Supplier>();
 
 	public PurchaseController() {
 		logger.debug("Purchase Controller created");
-		supplierDummies();
-		productDummies();
+		// supplierDummies();
+		// dummies.saveDummies();
+		// productDummies();
 
 	}
 
@@ -56,7 +67,8 @@ public class PurchaseController {
 	public String home(Model model, HttpSession session) {
 		logger.debug("Purchase detail show");
 		PurchaseInfo inSession = PurchaseSessionUtil.getPurchaseInSession(session);
-
+		dummies.createSupplierAndProduct();
+		suppliers = supplierService.getAll();
 		model.addAttribute(PurchaseConstant.SESSION_NAME, inSession);
 		model.addAttribute("suppliers", suppliers);
 		model.addAttribute("actionUrl", "/purchase/next/product");
@@ -80,7 +92,7 @@ public class PurchaseController {
 
 		detailValidator.validate(purchase, result);
 		if (result.hasErrors()) {
-			model.addAttribute("suppliers", suppliers);
+			model.addAttribute("suppliers", supplierService.getAll());
 			SessionUtil.print(model, request, null);
 			return "purchase/purchase-detail";
 		}
@@ -105,8 +117,7 @@ public class PurchaseController {
 		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
 		if (purchased.getSupplier().getId() != null) {
 			long supplierId = purchased.getSupplier().getId();
-			purchased.setSupplier(findSupplier(supplierId));
-			;
+			purchased.setSupplier(supplierService.findById(supplierId));
 		}
 
 		SessionUtil.print(model, request, session);
@@ -128,12 +139,21 @@ public class PurchaseController {
 				return "purchase/purchase-product";
 			}
 			// TODO CALL SERVICE TO RETRIEVE PRODUCT BASE ON CRITERIA
-			model.addAttribute("products", products);
-			model.addAttribute("index", index);
-			model.addAttribute("productLine", productLine);
+			ProductCriteria productCriteria = new ProductCriteria();
+			if (productLine.getProduct().getName() != null) {
+				productCriteria.setName(productLine.getProduct().getName());
+			}
+
+			if (productLine.getProduct().getBarcode() != null) {
+				productCriteria.setBarcode(productLine.getProduct().getBarcode());
+			}
+			redirectModel.addFlashAttribute("products", productService.search(productCriteria));
+			redirectModel.addFlashAttribute("index", index);
+			redirectModel.addFlashAttribute("productLine", productLine);
 			// put current selected info into session
 			session.setAttribute("productLine", productLine);
-			return "purchase/search-product";
+			return "redirect:/purchase/search";
+			//return "purchase/search-product";
 		} else if (action.equals("add")) {
 			logger.debug("action is add");
 
@@ -165,6 +185,11 @@ public class PurchaseController {
 
 		return "redirect:/purchase/confirm";
 	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String searchProduct(Model model, HttpSession session) {
+		return "purchase/search-product";
+	}
 
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
 	public String confirmPurchased(Model model, HttpSession session) {
@@ -176,6 +201,16 @@ public class PurchaseController {
 		return "purchase/confirmed";
 	}
 
+	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	public String submitPurchased(Model model, HttpSession session, SessionStatus sessionStatus) {
+		logger.debug("Submit purchased");
+		PurchaseInfo purchased = PurchaseSessionUtil.getPurchaseInSession(session);
+		SessionUtil.print(model, null, session);
+		sessionStatus.setComplete();
+
+		return "redirect:/purchase";
+	}
+
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
 	public String selectedProduct(HttpSession session, @PathVariable Long id, @RequestParam("index") int index,
 			RedirectAttributes model) {
@@ -185,7 +220,7 @@ public class PurchaseController {
 
 		// TODO SERVICE SHOULD CALL A METHOD TO RETRIVE A PRODUCT
 		// get product by id selected:
-		Product p = getById(id);
+		Product p = productService.findById(id);
 		// show selected product on screen
 		logger.debug("Product id: " + p.getId());
 		p.setSalesPrice(pInfo.getProduct().getSalesPrice());
@@ -233,60 +268,4 @@ public class PurchaseController {
 		return "redirect:/purchase/product";
 	}
 
-	private Product getById(Long id) {
-		for (Product product : products) {
-			if (product.getId() == id) {
-				return product;
-			}
-		}
-		return null;
-	}
-
-	List<Supplier> suppliers = new ArrayList<Supplier>();
-
-	private void supplierDummies() {
-		for (int i = 1; i <= 10; i++) {
-			Supplier s = new Supplier();
-			s.setCode("c00" + i);
-			s.setContact("contact " + i);
-			s.setEmail(1 + "test@tes.com");
-			s.setId(Long.valueOf(i));
-			s.setName("Supplier " + i);
-
-			Address addr = new Address();
-			addr.setId(Long.valueOf(i));
-			addr.setCity("City " + i);
-			addr.setLine1("Line 1 " + i);
-			addr.setState("State " + i);
-
-			s.setSupplierAddress(addr);
-			suppliers.add(s);
-		}
-	}
-
-	private Supplier findSupplier(long id) {
-		for (Supplier s : suppliers) {
-			if (s.getId() == id) {
-				return s;
-			}
-		}
-		return null;
-	}
-
-	private List<Product> products = new ArrayList<Product>();
-
-	private void productDummies() {
-		for (int i = 1; i <= 10; i++) {
-			Product p = new Product();
-			p.setBarcode("ABC12" + i);
-			p.setDescription("Description of " + i);
-			p.setId(Long.valueOf(i));
-			p.setName("Name " + i);
-			p.setUnit("Unit " + i);
-			p.setQuantity(0);
-			p.setSalesPrice(BigDecimal.ZERO);
-
-			products.add(p);
-		}
-	}
 }

@@ -1,0 +1,2 @@
+insert into address (id, line1, line2, city, state, postCode) values (1, 'Line 1', null, 'City 1', 'State 1', '11111');
+insert into supplier (id, code, name, contact, email, address_id) values (1, 'CC01', 'Supplier 1', '021 111111', 'supplier1@test.com', 1)

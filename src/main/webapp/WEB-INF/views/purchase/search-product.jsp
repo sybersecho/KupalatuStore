@@ -122,6 +122,11 @@
 					<span>Purchase</span>
 				</a>
 			</li>
+			<li>
+				<a href="<c:url value="/sales"/>"> <i
+					class="fa fa-opencart"></i> <span>Sales</span>
+				</a>
+			</li>
 		</ul> <!-- /.sidebar-menu --> 
 		</section> <!-- /.sidebar --> 
 		</aside>
@@ -142,7 +147,7 @@
 							<h3 class="box-title">Search Result</h3>
 							<!-- tools box -->
 			               	<div class="pull-right box-tools">
-			              		<a href="<c:url value="/product/add" />" class="btn btn-info btn-sm btn-flat"  title="Cancel">Cancel</a>
+			              		<a href="<c:url value="/purchase/product" />" class="btn btn-info btn-sm btn-flat"  title="Cancel">Cancel</a>
 			               	</div><!-- /. tools -->
 		                </div><!-- /.box-header -->
 		                <div class="box-body">

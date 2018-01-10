@@ -15,12 +15,15 @@
 		<!-- Spring -->
 		<spring-framework.version>4.2.5.RELEASE</spring-framework.version>
 
+		<spring-security.version>4.2.3.RELEASE</spring-security.version>
+
 		<!-- Hibernate / JPA -->
 		<hibernate.version>5.0.3.Final</hibernate.version>
 
 		<!-- connector to DB -->
 		<!-- mysql -->
 		<mysql.version>5.1.37</mysql.version>
+		<sqljdbc.version>4.0</sqljdbc.version>
 
 		<!-- junit -->
 		<junit.version>4.12</junit.version>
@@ -56,6 +59,26 @@
 			<version>${spring-framework.version}</version>
 		</dependency>
 
+		<!-- Spring Security -->
+		<!-- <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.2.3.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.2.3.RELEASE</version>
+		</dependency> -->
+
+		<!-- Spring Security JSP Taglib -->
+		<!-- <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency> -->
+
 		<!-- Spring Transaction -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -81,6 +104,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
+		</dependency>
+
+		<!-- sql server connector java -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>sqljdbc4</artifactId>
+			<version>4.0</version>
 		</dependency>
 
 		<dependency>

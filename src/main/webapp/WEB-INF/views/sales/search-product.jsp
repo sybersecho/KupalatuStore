@@ -23,12 +23,6 @@
 <!-- Ionicons -->
 <link rel="stylesheet"
 	href="<c:url value="/resources/ionicons/2.0.1/css/ionicons.min.css"/>">
-<!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/timepicker/bootstrap-timepicker.min.css"/>">
-<!-- Select2 -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/select2/select2.min.css"/>">
-<!-- DatePicer -->
-<link rel="stylesheet" href="<c:url value="/resources/plugins/datepicker/datepicker3.css"/>">
 <!-- Theme style -->
 <link rel="stylesheet"
 	href="<c:url value="/resources/dist/css/AdminLTE.min.css"/>">
@@ -122,17 +116,12 @@
 					<span>Manage Product</span>
 				</a>
 			</li>
-			<li class="active">
-				<a href="<c:url value="/purchase"/>"> 
-					<i class="fa fa-opencart"></i>
-					<span>Purchase</span>
-				</a>
-			</li>
-			<li>
-				<a href="<c:url value="/sales"/>"> <i
+			<li><a href="<c:url value="/purchase"/>"> <i
+					class="fa fa-opencart"></i> <span>Purchase</span>
+			</a></li>
+			<li class="active"><a href="<c:url value="/sales"/>"> <i
 					class="fa fa-opencart"></i> <span>Sales</span>
-				</a>
-			</li>
+			</a></li>
 		</ul> <!-- /.sidebar-menu --> 
 		</section> <!-- /.sidebar --> 
 		</aside>
@@ -141,72 +130,52 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-          		<h1>Purchase Information</h1>
+          		<h1>Sales Information</h1>
         	</section>
 
 			<!-- Main content -->
 			<section class="content">
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="box box-info">
+					<div class="box box-primary">
 						<div class="box-header with-border">
-							<h3 class="box-title">Purchase Detail</h3>							
+							<h3 class="box-title">Search Result</h3>
+							<!-- tools box -->
+			               	<div class="pull-right box-tools">
+			              		<a href="<c:url value="/sales" />" class="btn btn-info btn-sm btn-flat"  title="Cancel">Cancel</a>
+			               	</div><!-- /. tools -->
 		                </div><!-- /.box-header -->
-		                <c:url var="action" value="${actionUrl}"/>
-		                <form:form method="POST" modelAttribute="purchased"  action="${action}" cssClass="form-horizontal">
 		                <div class="box-body">
-		                	<form:hidden path="totalPurchased"/>
-		                	<spring:bind path="purchaseNo">
-	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
-                      			<div class="col-sm-10">
-                        			<form:input path="purchaseNo" cssClass="form-control" placeholder="No Purchase"/>
-                      				<form:errors path="purchaseNo" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	</spring:bind>
-	                    	<spring:bind path="purchaseDate">
-	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="purchaseDate" cssClass="col-sm-2 control-label">Date</form:label>
-                      			<div class="col-sm-10">
-                        			<form:input path="purchaseDate" cssClass="form-control" />
-                        			<form:errors path="purchaseDate" class="control-label" />
-	                      		</div>
-	                    	</div>
-	                    	</spring:bind>
-	                    	<spring:bind path="supplier">
-	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="supplier" cssClass="col-sm-2 control-label">Supplier</form:label>
-                      			<div class="col-sm-10">
-                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;" >
-                        				<form:options items="${suppliers }" itemValue="id"  itemLabel="name" />
-                        				<%-- <c:forEach items="${suppliers }" var="s">
-                        					<form:option value="${s.id }"/>
-                        				</c:forEach> --%>
-                        			</form:select>
-	                      		</div>
-	                    	</div>
-	                    	</spring:bind>
-	                    	<spring:bind path="details">
-	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="details" cssClass="col-sm-2 control-label">Details</form:label>
-                      			<div class="col-sm-10">                      				
-                      				<form:textarea path="details" rows="3" cssClass="form-control" placeholder="details ..."/>
-                      				<form:errors path="details" class="control-label" />
-                   			 	</div>
-                   			 </div>
-	                    	</spring:bind>
+		                	<table id="product" class="table table-striped">
+                    			<thead>
+                      			<tr>
+								  <th>#</th>
+								  <th>Barcode</th>
+								  <th>Name</th>
+								  <th>Action</th>
+                      			</tr>
+                    			</thead>
+                    			<tbody>
+                    				<c:forEach var="product" items="${products }" varStatus="i">
+                    				<tr>
+                    					<td>${i.count }</td>
+				                      	<td>${product.barcode }</td>
+				                      	<td>${product.name }</td>
+				                      	<td>
+				                              <a href="<c:url value="/sales/product/${product.id}?i=${index }"/>" class="btn btn-warning"><i class="fa fa-pencil">Select</i></a>
+				                         </td>
+                    				</tr>
+				                    </c:forEach>
+                    			</tbody>
+                    		</table>
 		                </div><!-- /.box-body -->
-		                <div class="box-footer clearfix">
-		                	<a href="<c:url value="/purchase/clear"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a> 
-							<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="submit" value="submit" >Next</button>
-						</div><!-- /.box-footer -->
-		                </form:form>		                	                
 					</div><!-- /.box -->
 				</div><!-- /.col -->
 			</div><!-- /.row --> 
 			</section><!-- /.content -->
-		</div><!-- /.content-wrapper -->
+
+		</div>
+		<!-- /.content-wrapper -->
 
 		<!-- Main Footer -->
 		<footer class="main-footer"> <!-- To the right -->
@@ -236,22 +205,16 @@
 		src="<c:url value="/resources/plugins/datatables/jquery.dataTables.min.js"/>"></script>
 	<script
 		src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js"/>"></script>
-	<!-- Select2 -->
-    <script src="<c:url value="/resources/plugins/select2/select2.full.min.js"/>"></script>
-	<!-- InputMask -->
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.js"/>"></script>
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"/>"></script>
-    <script src="<c:url value="/resources/plugins/input-mask/jquery.inputmask.extensions.js"/>"></script>
-    <!-- DatePicker -->
-    <script src="<c:url value="/resources/plugins/datepicker/bootstrap-datepicker.js"/>"></script>
 	<script>
       $(function () {        
-		//Datemask dd/mm/yyyy
-       	/* $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"}); */
-       	/* $("#purchaseDate").datepicker({
-       		format:"dd/mm/yyyy"
-       	}); */
-       	$("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        $('#product').DataTable({
+		"sDom": '<"row view-filter"<"col-sm-12"<"pull-left"i><"pull-right"><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"p>>>',
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "autoWidth": false
+        });
       });
     </script>
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.
