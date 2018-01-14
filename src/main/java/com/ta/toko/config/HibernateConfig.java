@@ -4,23 +4,19 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-//@ComponentScan({ "com.ta.toko.module" }) // scan service
+// @ComponentScan({ "com.ta.toko.module" }) // scan service
 public class HibernateConfig {
 
 	@Bean
@@ -37,7 +33,8 @@ public class HibernateConfig {
 		Properties prop = new Properties();
 		prop.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 		prop.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-//		prop.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect");
+		// prop.setProperty("hibernate.dialect",
+		// "org.hibernate.dialect.SQLServer2012Dialect");
 		prop.setProperty("hibernate.show_sql", "true");
 		prop.setProperty("hibernate.format_sql", "true");
 		return prop;
@@ -45,8 +42,9 @@ public class HibernateConfig {
 
 	@Bean
 	public DataSource basicDataSource() {
-//		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-//		EmbeddedDatabase dataSource = builder.setType(EmbeddedDatabaseType.H2).addScript("db/sql/insert-data.sql").build();
+		// EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		// EmbeddedDatabase dataSource =
+		// builder.setType(EmbeddedDatabaseType.H2).addScript("db/sql/insert-data.sql").build();
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUsername("sa");
 		dataSource.setPassword("sa");
@@ -58,22 +56,23 @@ public class HibernateConfig {
 		// dataSource.setmax
 		return dataSource;
 	}
-	
-//	@Bean
-//	public DataSource basicDataSource() {
-////		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-////		EmbeddedDatabase dataSource = builder.setType(EmbeddedDatabaseType.H2).addScript("db/sql/insert-data.sql").build();
-//		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//		dataSource.setUsername("ta");
-//		dataSource.setPassword("Admin@3456");//Admin@3456
-////		dataSource.setValidationQuery("SELECT 1;");
-//		dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=kupalatu_store");
-//		dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-////		dataSource.setInitialSize(5);
-//		// dataSource.set
-//		// dataSource.setmax
-//		return dataSource;
-//	}
+
+	// @Bean
+	// public DataSource basicDataSource() {
+	//// EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+	//// EmbeddedDatabase dataSource =
+	// builder.setType(EmbeddedDatabaseType.H2).addScript("db/sql/insert-data.sql").build();
+	// DriverManagerDataSource dataSource = new DriverManagerDataSource();
+	// dataSource.setUsername("ta");
+	// dataSource.setPassword("Admin@3456");//Admin@3456
+	//// dataSource.setValidationQuery("SELECT 1;");
+	// dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=kupalatu_store");
+	// dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	//// dataSource.setInitialSize(5);
+	// // dataSource.set
+	// // dataSource.setmax
+	// return dataSource;
+	// }
 
 	@Bean
 	public HibernateTransactionManager transactionManager(SessionFactory s) {
