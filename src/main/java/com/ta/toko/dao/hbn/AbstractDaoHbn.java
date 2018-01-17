@@ -6,6 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public abstract class AbstractDaoHbn<T extends Serializable> implements BaseDao<
 	@Autowired
 	private SessionFactory sessionFactory;
 	private Class<T> domainClass;
+	private int batchSize = 30;
 
 	protected Session getSession() {
 		return sessionFactory.getCurrentSession();
@@ -64,9 +66,14 @@ public abstract class AbstractDaoHbn<T extends Serializable> implements BaseDao<
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<T> findAll(Criteria criteria) {
+		return criteria.list();
+	}
+
+	// @SuppressWarnings("unchecked")
 	@Transactional
 	public List<T> getAll() {
-		return getSession().createQuery("from " + getDomainClassName()).list();
+		return findAll(getSession().createCriteria(getDomainClass()));
 	}
 
 	public void update(T t) {
@@ -91,5 +98,19 @@ public abstract class AbstractDaoHbn<T extends Serializable> implements BaseDao<
 
 	public boolean exists(Serializable id) {
 		return (get(id) != null);
+	}
+
+	public void bulkUpdate(List<T> ts) {
+		getSession().getTransaction().begin();
+		int i = 0;
+		for (T t : ts) {
+			getSession().persist(t);
+			if (i % batchSize == 0 && i > 0) {
+				getSession().flush();
+				getSession().clear();
+			}
+			i++;
+		}
+		getSession().getTransaction().commit();
 	}
 }

@@ -74,4 +74,10 @@ public class ProductServiceImpl implements ProductService {
 		return new ArrayList<Product>();
 	}
 
+	@Override
+	public void updateProducts(List<Product> products) {
+		dao.bulkUpdate(products);
+
+	}
+
 }

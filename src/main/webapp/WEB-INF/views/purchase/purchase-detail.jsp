@@ -148,14 +148,36 @@
 			<section class="content">
 			<div class="row">
 				<div class="col-xs-12">
+				
 					<div class="box box-info">
 						<div class="box-header with-border">
 							<h3 class="box-title">Purchase Detail</h3>							
 		                </div><!-- /.box-header -->
-		                <c:url var="action" value="${actionUrl}"/>
-		                <form:form method="POST" modelAttribute="purchased"  action="${action}" cssClass="form-horizontal">
+		                <c:url var="action" value="/purchase/"/>
+		                <form:form method="POST" commandName="purchased" action="${action}" cssClass="form-horizontal">
+		                <c:if test="${purchaseSaved==true }">
+		                	<div class="box-body">
+			                <div class="col-xs-12">
+			                	<div class="callout callout-success">
+			                		<h4>Successfully save a purchase</h4>
+			                	</div>
+			                </div>
+			                </div>
+						</c:if>
+		                <div class="col-xs-12 col-md-6">
 		                <div class="box-body">
 		                	<form:hidden path="totalPurchased"/>
+		                	<form:hidden path="index"/>
+		                	<form:hidden path="edit"/>
+		                	<spring:bind path="productLineInfos">
+	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
+	                    		<%-- <form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
+                      			<div class="col-sm-10"> --%>
+                        			<%-- <form:input path="purchaseNo" cssClass="form-control" placeholder="No Purchase"/> --%>
+                      				<form:errors path="productLineInfos" class="control-label" />
+	                      		<!-- </div> -->
+	                    	</div>
+	                    	</spring:bind>
 		                	<spring:bind path="purchaseNo">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 	                    		<form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
@@ -178,8 +200,8 @@
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 	                    		<form:label path="supplier" cssClass="col-sm-2 control-label">Supplier</form:label>
                       			<div class="col-sm-10">
-                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;" >
-                        				<form:options items="${suppliers }" itemValue="id"  itemLabel="name" />
+                        			<form:select path="supplier" cssClass="form-control select2" style="width: 100%;" items="${suppliers }"  itemValue="id"  itemLabel="name">
+                        				<%-- <form:options items="${suppliers }" itemValue="id"  itemLabel="name" /> --%>
                         				<%-- <c:forEach items="${suppliers }" var="s">
                         					<form:option value="${s.id }"/>
                         				</c:forEach> --%>
@@ -197,9 +219,107 @@
                    			 </div>
 	                    	</spring:bind>
 		                </div><!-- /.box-body -->
+		                </div>
+		                
+		                <div class="col-xs-12 col-md-6">
+		                <div class="box-body">
+		                	<spring:bind path="productBarcode">
+		                	<div class="form-group ${status.error  ? 'has-error' : ''}">
+		                		<form:label path="productBarcode" cssClass="col-sm-2 control-label">Barcode</form:label>
+		                		<div class="col-sm-8">
+		                			<form:input path="productBarcode" cssClass="form-control" placeholder="Barcode" />
+									<form:errors path="productBarcode" class="control-label" />
+								</div>
+								<div class="col-sm-2">
+									<div class="pull-right">
+									<button class="btn btn-primary" type="submit" id="action" name="action" value="search">
+										<i class="fa fa-search"></i> Search
+									</button>
+									</div>
+								</div>
+		                	</div>
+		                	</spring:bind>
+		                	<spring:bind path="productName">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="productName" cssClass="col-sm-2 control-label">Name</form:label>
+								<div class="col-sm-10">
+									<form:input path="productName" cssClass="form-control" placeholder="Name" />
+									<form:errors path="productName" class="control-label" />
+								</div>
+							</div>
+							</spring:bind>
+							<spring:bind path="quantity">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="quantity" cssClass="col-sm-2 control-label">Quantity</form:label>
+								<div class="col-sm-10">
+									<form:input path="quantity" cssClass="form-control" placeholder="Quantity" />
+									<form:errors path="quantity" class="control-label" />
+								</div>
+							</div>
+							</spring:bind>
+							<spring:bind path="purchasePrice">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="purchasePrice" cssClass="col-sm-2 control-label">Purchase Price</form:label>
+								<div class="col-sm-10">
+									<form:input path="purchasePrice" cssClass="form-control" placeholder="Purchase Price" />
+									<form:errors path="purchasePrice" class="control-label" />
+								</div>
+							</div>
+							</spring:bind>
+							<spring:bind path="productPrice">
+								<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="productPrice" cssClass="col-sm-2 control-label">Sales Price</form:label>
+								<div class="col-sm-10">
+									<form:input path="productPrice" cssClass="form-control" placeholder="Sales Price" />
+									<form:errors path="productPrice" class="control-label" />
+								</div>
+								</div>
+							</spring:bind>
+							<div class="pull-right">
+							<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="add">
+										<i class="fa fa-plus-square"></i> Add
+									</button>
+							</div>
+		                </div><!-- /.box-body -->
+		                </div>
+		                <div class="col-xs-12">
+		                <div class="box-body table-responsive">								
+								<table id="product" class="table table-striped">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Quantity</th>
+											<th>Price</th>
+											<th>Total</th>
+											<th>Sell Price</th>
+											<th style="width: 100px"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="pline" items="${purchased.productLineInfos }"
+											varStatus="index">
+											<tr>
+												<td>${pline.product.name }</td>
+												<td>${pline.quantity }</td>
+												<td>${pline.purchasePrice }</td>
+												<td>${pline.totalItem }</td>
+												<td>${pline.salePrice }</td>
+												<td>
+													<div class="pull-right">
+														<a href='<c:url value="/purchase/select/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> 
+														<a href='<c:url value="/purchase/delete/line/${index.count }"/>' class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
+													</div>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.box-footer -->
+		                </div>
 		                <div class="box-footer clearfix">
 		                	<a href="<c:url value="/purchase/clear"/>" class="btn btn-sm btn-danger btn-flat pull-left">Clear</a> 
-							<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="submit" value="submit" >Next</button>
+							<button class="btn btn-sm btn-info btn-flat pull-right" type="submit" id="action" name="action" value="confirm">Submit</button>
 						</div><!-- /.box-footer -->
 		                </form:form>		                	                
 					</div><!-- /.box -->
@@ -248,10 +368,14 @@
       $(function () {        
 		//Datemask dd/mm/yyyy
        	/* $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"}); */
-       	/* $("#purchaseDate").datepicker({
+       	/*
+       	$("#purchaseDate").datepicker({
        		format:"dd/mm/yyyy"
-       	}); */
-       	$("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+       	}); 
+       	$("#purchaseDate").datepicker().datepicker('setDate', new Date());
+
+       	//*/
+       	$("#purchaseDate").inputmask("dd/mm/yyyy",{placeholder:"dd/mm/yyyy"}); 
       });
     </script>
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.

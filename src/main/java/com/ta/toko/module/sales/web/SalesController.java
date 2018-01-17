@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.ta.toko.entity.Product;
 import com.ta.toko.module.product.ProductCriteria;
 import com.ta.toko.module.product.ProductService;
 import com.ta.toko.module.sales.model.ProductLine;
+import com.ta.toko.module.sales.model.SalesConstant;
 import com.ta.toko.module.sales.model.SalesInformation;
 
 @Controller
-// @SessionAttributes(SalesConstant.SESSION_NAME)
+@SessionAttributes(SalesConstant.SESSION_NAME)
 @RequestMapping("/sales")
 public class SalesController {
 	private static Logger logger = LoggerFactory.getLogger(SalesController.class);

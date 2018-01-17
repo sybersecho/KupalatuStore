@@ -1,6 +1,7 @@
 package com.ta.toko.test.dummy;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,22 @@ public class SupplierDummies {
 		}
 	}
 
+	public Supplier getSupplier(int index) {
+		return getSuppliers().get(index - 1);
+	}
+
+	public List<Supplier> getSuppliers() {
+		return supplierService.getAll();
+	}
+
+	public Product getProduct(int index) {
+		return getProducts().get(index - 1);
+	}
+
+	public List<Product> getProducts() {
+		return productService.getAll();
+	}
+
 	private void createSuppliers() {
 		for (int i = 1; i <= 10; i++) {
 			Supplier s = new Supplier();
@@ -56,7 +73,7 @@ public class SupplierDummies {
 			supplierService.save(s);
 		}
 	}
-	
+
 	private void createProducts() {
 		for (int i = 1; i <= 10; i++) {
 			Product p = new Product();

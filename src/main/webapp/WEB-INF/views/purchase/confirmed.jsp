@@ -150,7 +150,7 @@
 			           	<address>
 			          	<strong>${supplier.name }.</strong><br>
 			                ${supplier.supplierAddress.line1}<br>
-			                ${supplier.supplierAddress.city },${supplier.supplierAddress.state }, ${supplier.supplierAddress.postCode }<br>
+			                ${supplier.supplierAddress.city },${supplier.supplierAddress.state },Post: ${supplier.supplierAddress.postCode }<br>
 			                Phone:  ${supplier.contact }<br>
 			                Email: ${supplier.email }
 			           	</address>
@@ -207,10 +207,10 @@
           		</div><!-- /.row -->
           		<div class="row">
           			<div class="col-xs-12">          				
-          				<c:url value="/purchase/submit" var="submit"/>
-          				<form action="${submit }" method="post">
+          				<c:url value="/purchase/confirmed" var="confirmed"/>
+          				<form action="${confirmed }" method="GET">
           					<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-          					<button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+          					<!-- <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button> -->
           				</form>           				
           			</div>
           		</div><!-- /.row -->

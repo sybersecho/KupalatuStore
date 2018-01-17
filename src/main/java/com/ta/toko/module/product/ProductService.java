@@ -14,12 +14,13 @@ public interface ProductService {
 	public void update(Product product);
 
 	public void delete(long idProduct);
-	
+
 	public List<Product> search(ProductCriteria criteria);
 
 	public void deleteAll();
-	
+
 	public List<Product> emptyList();
-	
-	
+
+	public void updateProducts(List<Product> products);
+
 }

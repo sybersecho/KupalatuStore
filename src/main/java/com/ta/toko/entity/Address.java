@@ -27,7 +27,7 @@ public class Address implements Serializable {
 	private String line2;
 	private String city;
 	private String state;
-	@NotEmpty
+//	@NotEmpty
 	private String postCode;
 
 	public Long getId() {
@@ -76,6 +76,12 @@ public class Address implements Serializable {
 
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
+	}
+
+	@Override
+	public String toString() {
+		return "Address [line1=" + line1 + ", line2=" + line2 + ", city=" + city + ", state=" + state + ", postCode="
+				+ postCode + "]";
 	}
 
 }

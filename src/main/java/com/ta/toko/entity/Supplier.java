@@ -92,4 +92,12 @@ public class Supplier implements Serializable {
 	public void setSupplierAddress(Address supplierAddress) {
 		this.supplierAddress = supplierAddress;
 	}
+
+	@Override
+	public String toString() {
+//		return "Supplier [id=" + id + ", code=" + code + ", contact=" + contact + ", email=" + email + ", name=" + name
+//				+ ", supplierAddress=" + supplierAddress + "]";
+		return name;
+	}
+
 }

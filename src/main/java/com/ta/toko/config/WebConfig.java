@@ -1,5 +1,6 @@
 package com.ta.toko.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -51,7 +52,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
-		registry.addConverter(new StringToSupplierConverter());
+		registry.addConverter(stringToSupplierConverter);
 		super.addFormatters(registry);
 	}
+	
+	@Autowired
+	private StringToSupplierConverter stringToSupplierConverter;
 }

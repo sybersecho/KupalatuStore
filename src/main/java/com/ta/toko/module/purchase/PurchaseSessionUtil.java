@@ -1,9 +1,12 @@
-package com.ta.toko.module.purchase.model;
+package com.ta.toko.module.purchase;
 
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ta.toko.module.purchase.model.PurchaseConstant;
+import com.ta.toko.module.purchase.model.PurchaseInfo;
 
 public class PurchaseSessionUtil {
 
@@ -32,5 +35,10 @@ public class PurchaseSessionUtil {
 	public static void putPurchaseInfoInSession(HttpSession session, PurchaseInfo purchaseInfo) {
 		logger.debug("Put purchase in session");
 		session.setAttribute(PurchaseConstant.SESSION_NAME, purchaseInfo);
+	}
+	
+	public static void removePurchaseInfoInSession(HttpSession session) {
+		logger.debug("remove purchase in session");
+		session.removeAttribute(PurchaseConstant.SESSION_NAME);
 	}
 }
