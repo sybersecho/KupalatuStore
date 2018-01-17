@@ -1,4 +1,4 @@
-package com.ta.toko.module.supplier;
+package com.ta.toko.module.purchase;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

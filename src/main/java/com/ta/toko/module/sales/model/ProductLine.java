@@ -1,31 +1,36 @@
 package com.ta.toko.module.sales.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ta.toko.entity.Product;
 
-public class ProductLine {
+public class ProductLine implements Serializable {
+	
+	private static Logger logger = LoggerFactory.getLogger(ProductLine.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Product product;
 	private int quantity;
 	private BigDecimal subTotal;
-	private String no;
-	private Date date;
+	// private String no;
+	// private Date date;
 
-	public String getNo() {
-		return no;
-	}
+	// public String getNo() {
+	// return no;
+	// }
+	//
+	// public void setNo(String no) {
+	// this.no = no;
+	// }
 
-	public void setNo(String no) {
-		this.no = no;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
+	public ProductLine() {
+		this.product = new Product();
 	}
 
 	public BigDecimal getSubTotal() {
@@ -50,6 +55,10 @@ public class ProductLine {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public void calculateSubTotal() {
+		setSubTotal(getProduct().getSalesPrice().multiply(BigDecimal.valueOf(quantity)));
 	}
 
 }

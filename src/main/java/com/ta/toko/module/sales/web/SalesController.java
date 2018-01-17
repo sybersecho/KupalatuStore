@@ -1,7 +1,6 @@
 package com.ta.toko.module.sales.web;
 
-import java.math.BigDecimal;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -11,18 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ta.toko.entity.Product;
 import com.ta.toko.module.product.ProductCriteria;
 import com.ta.toko.module.product.ProductService;
-import com.ta.toko.module.sales.model.ProductLine;
+import com.ta.toko.module.sales.SalesService;
+import com.ta.toko.module.sales.SalesSessionUtil;
 import com.ta.toko.module.sales.model.SalesConstant;
 import com.ta.toko.module.sales.model.SalesInformation;
+import com.ta.toko.util.SessionUtil;
 
 @Controller
 @SessionAttributes(SalesConstant.SESSION_NAME)
@@ -30,102 +34,111 @@ import com.ta.toko.module.sales.model.SalesInformation;
 public class SalesController {
 	private static Logger logger = LoggerFactory.getLogger(SalesController.class);
 
-	private SalesInformation currentSales;
+	// private SalesInformation currentSales;
+	@Autowired
+	private SalesSearchProductValidator searchValidator;
+	@Autowired
+	private SalesAddProductValidator addValidator;
+	@Autowired
+	private SalesDetailValidator detailValidator;
 	@Autowired
 	private ProductService productService;
-	private ProductLine temp;
+	@Autowired
+	private SalesService salesService;
+	// private ProductLine temp;
 
 	public SalesController() {
 		logger.debug("Sales Controller created");
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String home(Model model) {
+	public String home(Model model, HttpSession session) {
 		logger.debug("Sales home");
 
-		if (currentSales == null) {
-			currentSales = new SalesInformation();
-		}
-		model.addAttribute("sale", currentSales);
+		SalesInformation currentSales = SalesSessionUtil.getSalesInSession(session);
+		model.addAttribute(SalesConstant.SESSION_NAME, currentSales);
+
+		logger.info("line size: {}", currentSales.getProductLines().size());
 
 		return "sales/sales";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String searchProduct(@RequestParam("action") String action, @Valid SalesInformation sales,
-			BindingResult result, Model model, HttpSession session) {
-		logger.info("method post");
+	public String searchProduct(@Valid @ModelAttribute(SalesConstant.SESSION_NAME) SalesInformation sales,
+			BindingResult result, @RequestParam("action") String action, Model model, HttpSession session,
+			HttpServletRequest request, SessionStatus status, RedirectAttributes redirectModel) {
+		SessionUtil.print(model, request, session);
 
 		if (action.equals("search")) {
 			logger.info("action search");
-			return searchProduct(sales, model);
+			return searchProduct(sales, model, result);
 		} else if (action.equals("add")) {
 			logger.info("action add");
-			ProductLine productLine = sales.getEditedProduct();
-			productLine.setSubTotal(
-					productLine.getProduct().getSalesPrice().multiply(BigDecimal.valueOf(productLine.getQuantity())));
-			if (currentSales.isEdited()) {
-				currentSales.updateProductLine(temp);
-			} else {
-				currentSales.addProductLine(productLine);
-			}
+			return addLineToSales(sales, result);
+		}
+		
+		detailValidator.validate(sales, result);
+		if (result.hasErrors()) {
+			return "sales/sales";
+		}
+		
+		salesService.save(sales);
+		status.setComplete();
+		SalesSessionUtil.removeSalesInSession(session);
+		
+		redirectModel.addFlashAttribute("saleSaved", true);
 
-			return "redirect:/sales";
+		return "redirect:/sales";
+	}
+
+	private String addLineToSales(SalesInformation sales, BindingResult result) {
+		addValidator.validate(sales, result);
+		if (result.hasErrors()) {
+			return "sales/sales";
 		}
 
-		return "sales/search-product";
+		sales.addProductToLine();
+
+		return "redirect:/sales";
 	}
 
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
 	public String selectProduct(@PathVariable Long id, @RequestParam("i") int index, HttpSession session, Model model) {
 		logger.debug("product with Id " + id + " selected");
-		// currentSales
-		// SalesInformation information = SalesSessionUtil.getSalesInSession(session);
-		Product selectedProduct = productService.findById(id);
-		if (currentSales.isEdited()) {
-			currentSales.getEditedProduct().setProduct(selectedProduct);
-		} else {
-			ProductLine line = new ProductLine();
-			line.setProduct(selectedProduct);
-			currentSales.setEditedProduct(line);
-		}
 
-		// if (index >= 0) {
-		// currentSales.setEdited(true);
-		// currentSales.setEditPosition(index);
-		// } else {
-		// currentSales.setEdited(false);
-		// currentSales.setEditPosition(-1);
-		// }
-		// logger.info("current size: " + currentSales.getProductLines().size());
-		// // logger.info("information size: " + information.getProductLines().size());
-		// model.addAttribute("sale", currentSales);
+		SalesInformation information = SalesSessionUtil.getSalesInSession(session);
+		Product selectedProduct = productService.findById(id);
+
+		information.setProduct(selectedProduct);
 
 		return "redirect:/sales";
 	}
 
 	@RequestMapping(value = "/delete/line/{index}", method = RequestMethod.GET)
-	public String deleteSelectedLine(@PathVariable("index") int index) {
+	public String deleteSelectedLine(@PathVariable("index") int index, HttpSession session) {
 		logger.debug("delete product line index: " + index);
-
+		SalesInformation currentSales = SalesSessionUtil.getSalesInSession(session);
 		currentSales.removeProductLine(index - 1);
 		return "redirect:/sales";
 	}
 
 	@RequestMapping(value = "/select/line/{index}", method = RequestMethod.GET)
-	public String SelecteLine(@PathVariable("index") int index) {
+	public String SelecteLine(@PathVariable("index") int index, HttpSession session) {
 		logger.debug("select line index: " + index);
-		temp = currentSales.getProductLines().get(index - 1);
-		currentSales.selectLine(index - 1);
+		// temp = currentSales.getProductLines().get(index - 1);
+		SalesInformation currentSales = SalesSessionUtil.getSalesInSession(session);
+		currentSales.selectLine(index);
 
 		return "redirect:/sales";
 	}
 
-	private String searchProduct(SalesInformation sales, Model model) {
-		// productSearchValidator.validate(productLine, result);
-		// if (result.hasErrors()) {
-		// return "purchase/purchase-product";
-		// }
+	private String searchProduct(SalesInformation sales, Model model, BindingResult result) {
+
+		searchValidator.validate(sales, result);
+		if (result.hasErrors()) {
+			return "sales/sales";
+		}
+
 		ProductCriteria productCriteria = new ProductCriteria();
 		Product temp = sales.getEditedProduct().getProduct();
 		if (temp.getName() != null) {

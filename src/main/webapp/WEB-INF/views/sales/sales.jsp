@@ -139,68 +139,92 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Product Detail</h3>
 						</div><!-- /.box-header -->
-						<%-- <c:url var="action" value="${actionUrl}" /> --%>
-						<form:form method="POST" commandName="sale" cssClass="form-horizontal">
-						<div class="col-xs-6">
+						<c:url var="action" value="/sales"/>
+						<form:form method="POST" commandName="sales" action="${action}" cssClass="form-horizontal">
+						<c:if test="${saleSaved==true }">
+		                	<div class="box-body">
+			                <div class="col-xs-12">
+			                	<div class="callout callout-success">
+			                		<h4>Successfully save a sale</h4>
+			                	</div>
+			                </div>
+			                </div>
+						</c:if>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="col-xs-12 col-md-6">
 						<div class="box-body">
-							<div class="form-group">
-								<label for="No" class="col-sm-2 control-label">No</label>
+							<spring:bind path="productLines">
+	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
+	                    		<%-- <form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
+                      			<div class="col-sm-10"> --%>
+                        			<%-- <form:input path="purchaseNo" cssClass="form-control" placeholder="No Purchase"/> --%>
+                      				<form:errors path="productLines" class="control-label" />
+	                      		<!-- </div> -->
+	                    	</div>
+	                    	</spring:bind>
+							<spring:bind path="no">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="no" cssClass="col-sm-2 control-label">No</form:label>
+								<!-- <label for="No" class="col-sm-2 control-label">No</label> -->
 								<div class="col-sm-10">
-									<input type="no" class="form-control" id="No" placeholder="No">
+                        			<form:input path="no" cssClass="form-control" placeholder="No"/>
+                      				<form:errors path="no" class="control-label" />
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="Date" class="col-sm-2 control-label">Date</label>
+							</spring:bind>
+							<spring:bind path="salesDate">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="salesDate" cssClass="col-sm-2 control-label">Date</form:label>
+								<!-- <label for="Date" class="col-sm-2 control-label">Date</label> -->
 								<div class="col-sm-10">
-									<input type="salesDate" class="form-control" id="salesDate" placeholder="Date">
+                        			<form:input path="salesDate" cssClass="form-control" placeholder="Date"/>
+                      				<form:errors path="salesDate" class="control-label" />
+									<!-- <input type="text" class="form-control" id="salesDate" placeholder="Date"> -->
 								</div>
 							</div>
+							</spring:bind>
 						</div><!-- /.box-body -->
 						</div>
-						<div class="col-xs-6">
-						
-						<div class="box-body">
-							<c:url var="search" value="/search"/>
-							<%-- <form:form method="POST" commandName="product" action="${search}" cssClass="form-horizontal"> --%>						
-							<spring:bind path="editedProduct.product.barcode">
-							<div class="form-group ${status.error  ? 'has-error' : ''}">								
-								<form:label path="editedProduct.product.barcode" cssClass="col-sm-2 control-label">Barcode</form:label>
-								<div class="col-sm-8">
-									<form:input path="editedProduct.product.barcode" cssClass="form-control" placeholder="Barcode"/>
-									<form:errors path="editedProduct.product.barcode" class="control-label" />
-	                      		</div>
+						<div class="col-xs-12 col-md-6">						
+						<div class="box-body">												
+							<spring:bind path="productBarcode">
+		                	<div class="form-group ${status.error  ? 'has-error' : ''}">
+		                		<form:label path="productBarcode" cssClass="col-sm-2 control-label">Barcode</form:label>
+		                		<div class="col-sm-8">
+		                			<form:input path="productBarcode" cssClass="form-control" placeholder="Barcode" />
+									<form:errors path="productBarcode" class="control-label" />
+								</div>
 								<div class="col-sm-2">
-								<div class="pull-right">
-								<button class="btn btn-primary" type="submit" id="action" name="action" value="search">
+									<div class="pull-right">
+									<button class="btn btn-primary" type="submit" id="action" name="action" value="search">
 										<i class="fa fa-search"></i> Search
-									</button></div>
+									</button>
+									</div>
 								</div>
-							</div>
-							</spring:bind>
-							<spring:bind path="editedProduct.product.name">
+		                	</div>
+		                	</spring:bind>
+		                	<spring:bind path="productName">
 							<div class="form-group ${status.error  ? 'has-error' : ''}">
-								<form:label path="editedProduct.product.name" cssClass="col-sm-2 control-label">Name</form:label>
-                      			<div class="col-sm-10">
-                      				<form:input path="editedProduct.product.name" cssClass="form-control" placeholder="Name"/>
-                      				<form:errors path="editedProduct.product.name" class="control-label" />
-	                      		</div>
+								<form:label path="productName" cssClass="col-sm-2 control-label">Name</form:label>
+								<div class="col-sm-10">
+									<form:input path="productName" cssClass="form-control" placeholder="Name" />
+									<form:errors path="productName" class="control-label" />
+								</div>
 							</div>
-							</spring:bind>
+							</spring:bind>							
 							
-							
-							<div class="form-group">
-								<form:label path="editedProduct.product.salesPrice" cssClass="col-sm-2 control-label">Price</form:label>
-								<!-- <label for="Price" class="col-sm-2 control-label">Price</label> -->
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="salesPrice" cssClass="col-sm-2 control-label">Price</form:label>								
 								<div class="col-sm-4">
-									<form:input path="editedProduct.product.salesPrice" cssClass="form-control disabled" placeholder="Price"/>
-									
+									<form:input path="salesPrice" cssClass="form-control" placeholder="Price" disabled="true"/>									
 								</div>
-								<form:label path="editedProduct.quantity" cssClass="col-sm-2 control-label">Quantity</form:label>
-								<!-- <label for="Quantity" class="col-sm-2 control-label">Quantity</label> -->
+								<spring:bind path="quantity">
+								<form:label path="quantity" cssClass="col-sm-2 control-label">Quantity</form:label>								
 								<div class="col-sm-4">
-									<form:input path="editedProduct.quantity" cssClass="form-control" placeholder="Quantity"/>
-									<!-- <input type="Quantity" class="form-control" id="Quantity" placeholder="Quantity"> -->
+									<form:input path="quantity" cssClass="form-control" placeholder="Quantity"/>
+									<form:errors path="quantity" class="control-label" />
 								</div>
+								</spring:bind>
 							</div>
 							<div class="pull-right">
 							<button class="btn btn-primary btn-sm" type="submit" id="action" name="action" value="add">
@@ -210,7 +234,7 @@
 						</div><!-- /.box-body -->
 						</div>
 						<div class="box-body table-responsive">	
-						<form:hidden path="productLines"/>
+						<%-- <form:hidden path="productLines"/> --%>
 						<table id="product" class="table table-striped">
 							<thead>
 								<tr>
@@ -222,7 +246,7 @@
 								</tr>
 							</thead>
 							<tbody>								
-								<c:forEach var="line" items="${sale.productLines}" varStatus="index">
+								<c:forEach var="line" items="${sales.productLines}" varStatus="index">
 								<tr>
 									<td>${line.product.name }</td>
 									<td>${line.quantity }</td>
@@ -248,7 +272,7 @@
 	          					<table class="table">
 	          						<tr>
 	                 					<th style="width:50%">Total:</th>
-	                 					<td>${sale.totalSales }</td>
+	                 					<td>${sales.totalSales }</td>
 	                				</tr>
 	          					</table>
 	          				</div>
@@ -256,10 +280,10 @@
 						</div><!-- /.box-body -->
 						<div class="box-body">
 							<div class="col-xs-12">          				
-          				<c:url value="/purchase/submit" var="submit"/>
-          				<form action="${submit }" method="post">
-          					<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-          				</form>           				
+          				<%-- <c:url value="/purchase/submit" var="submit"/>
+          				<form action="${submit }" method="post"> --%>
+          					<button class="btn btn-success pull-right" type="submit" id="action" name="action" value="submit"><i class="fa fa-credit-card"></i> Submit Payment</button>
+          				<%-- </form>  --%>          				
           			</div>
 						</div>
 						</form:form>

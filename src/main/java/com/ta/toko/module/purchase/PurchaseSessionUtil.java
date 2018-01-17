@@ -19,14 +19,6 @@ public class PurchaseSessionUtil {
 		if (purchase == null) {
 			logger.info("new Purchase created");
 			purchase = new PurchaseInfo();
-
-			session.setAttribute(PurchaseConstant.SESSION_NAME, purchase);
-			PurchaseInfo p = (PurchaseInfo) session.getAttribute(PurchaseConstant.SESSION_NAME);
-			if (p.equals(purchase)) {
-				logger.info("equal");
-			} else {
-				logger.info("not equal");
-			}
 		}
 
 		return purchase;
@@ -36,7 +28,7 @@ public class PurchaseSessionUtil {
 		logger.debug("Put purchase in session");
 		session.setAttribute(PurchaseConstant.SESSION_NAME, purchaseInfo);
 	}
-	
+
 	public static void removePurchaseInfoInSession(HttpSession session) {
 		logger.debug("remove purchase in session");
 		session.removeAttribute(PurchaseConstant.SESSION_NAME);

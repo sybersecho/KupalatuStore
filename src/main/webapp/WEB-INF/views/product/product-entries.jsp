@@ -189,6 +189,7 @@
 								  <th>#</th>
 								  <th>Barcode</th>
 								  <th>Name</th>
+								  <th>Quantity</th>
 								  <th>Action</th>
                       			</tr>
                     			</thead>
@@ -198,6 +199,7 @@
                     					<td>${index.count }</td>
 				                      	<td>${product.barcode }</td>
 				                      	<td>${product.name }</td>
+				                      	<td>${product.quantity }</td>
 				                      	<td>
 				                              <a href="<c:url value="/product/${product.id}"/>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
 				                              <a class="btn btn-danger" data-toggle="modal" data-target="#remove_${product.id }" data-original-title><i class="fa fa-trash"></i></a>

@@ -196,14 +196,14 @@ public class PurchaseInfo implements Serializable {
 
 	public void addProductToLine() {
 		this.productLine.calculateTotalItem();
-		logger.info("total item : " + this.productLine.getTotalItem());
-		logger.info("current line size: " + productLineInfos.size());
+//		logger.info("total item : " + this.productLine.getTotalItem());
+//		logger.info("current line size: " + productLineInfos.size());
 		if (isEdit) {
 			updateLineAt(index - 1, productLine);
 		} else {
 			addLineInfo(productLine);
 		}
-		logger.info("current line size: " + productLineInfos.size());
+//		logger.info("current line size: " + productLineInfos.size());
 		productLine = new ProductLineInfo();
 
 	}
