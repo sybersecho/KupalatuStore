@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ta.toko.entity.Product;
+import com.ta.toko.entity.User;
+import com.ta.toko.module.login.CustomUserDetails;
 import com.ta.toko.module.product.ProductCriteria;
 import com.ta.toko.module.product.ProductService;
 import com.ta.toko.module.sales.SalesService;
@@ -51,14 +54,25 @@ public class SalesController {
 		logger.debug("Sales Controller created");
 	}
 
+	@ModelAttribute("salesActive")
+	public String salesActive() {
+		return "active";
+	}
+
+	@ModelAttribute("user")
+	public CustomUserDetails getUser() {
+		CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return user;
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String home(Model model, HttpSession session) {
 		logger.debug("Sales home");
 
 		SalesInformation currentSales = SalesSessionUtil.getSalesInSession(session);
 		model.addAttribute(SalesConstant.SESSION_NAME, currentSales);
-
-		logger.info("line size: {}", currentSales.getProductLines().size());
+		// model.addAttribute("salesActive", "active");
 
 		return "sales/sales";
 	}
@@ -76,16 +90,16 @@ public class SalesController {
 			logger.info("action add");
 			return addLineToSales(sales, result);
 		}
-		
+
 		detailValidator.validate(sales, result);
 		if (result.hasErrors()) {
 			return "sales/sales";
 		}
-		
+
 		salesService.save(sales);
 		status.setComplete();
 		SalesSessionUtil.removeSalesInSession(session);
-		
+
 		redirectModel.addFlashAttribute("saleSaved", true);
 
 		return "redirect:/sales";

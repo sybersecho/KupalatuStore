@@ -46,8 +46,9 @@ public class LoginServiceImpl implements UserDetailsService {
 			}
 		}
 
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),
-				user.getPassword(), true, true, true, true, getGrantedAuthorities(user));
+//		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),
+//				user.getPassword(), true, true, true, true, getGrantedAuthorities(user));
+		CustomUserDetails userDetails = new CustomUserDetails(user);
 
 		return userDetails;
 	}

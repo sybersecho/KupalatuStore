@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ta.toko.entity.Product;
+import com.ta.toko.module.login.CustomUserDetails;
 import com.ta.toko.module.product.ProductCriteria;
 import com.ta.toko.module.product.ProductService;
 
@@ -27,6 +29,18 @@ public class ProductController {
 
 	@Autowired
 	private ProductSearchValidator validator;
+	
+	@ModelAttribute("productActive")
+	public String productActive() {
+		return "active";
+	}
+	
+	@ModelAttribute("user")
+	public CustomUserDetails getUser() {
+		CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return user;
+	}
 
 	@Autowired
 	public ProductController(ProductService service) {

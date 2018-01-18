@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ta.toko.entity.Product;
 import com.ta.toko.entity.Supplier;
+import com.ta.toko.module.login.CustomUserDetails;
 import com.ta.toko.module.product.ProductCriteria;
 import com.ta.toko.module.product.ProductService;
 import com.ta.toko.module.purchase.PurchaseService;
@@ -59,6 +61,18 @@ public class PurchaseController {
 
 	public PurchaseController() {
 		logger.debug("Purchase Controller created");
+	}
+	
+	@ModelAttribute("purchaseActive")
+	public String purchaseActive() {
+		return "active";
+	}
+	
+	@ModelAttribute("user")
+	public CustomUserDetails getUser() {
+		CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return user;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)

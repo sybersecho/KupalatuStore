@@ -5,14 +5,17 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ta.toko.entity.Supplier;
+import com.ta.toko.module.login.CustomUserDetails;
 import com.ta.toko.module.supplier.SupplierService;
 
 @Controller
@@ -21,6 +24,18 @@ public class SupplierController {
 
 	private static Logger logger = LoggerFactory.getLogger(SupplierController.class);
 	private SupplierService service;
+
+	@ModelAttribute("supplierActive")
+	public String supplierActive() {
+		return "active";
+	}
+
+	@ModelAttribute("user")
+	public CustomUserDetails getUser() {
+		CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return user;
+	}
 
 	@Autowired
 	public SupplierController(SupplierService service) {
@@ -50,8 +65,8 @@ public class SupplierController {
 			logger.debug("Supplier has error when saving");
 			return "supplier/supplier";
 		}
-//		long lastId = service.getAll().get(service.getAll().size() - 1).getId();
-//		supplier.setId(lastId + 1);
+		// long lastId = service.getAll().get(service.getAll().size() - 1).getId();
+		// supplier.setId(lastId + 1);
 		service.save(supplier);
 		return "redirect:/supplier";
 	}
