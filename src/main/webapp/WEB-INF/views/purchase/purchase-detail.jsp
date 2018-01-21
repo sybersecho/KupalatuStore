@@ -86,6 +86,7 @@
 		                	<form:hidden path="index"/>
 		                	<form:hidden path="edit"/>
 		                	<spring:bind path="productLineInfos">
+		                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
 	                    		<%-- <form:label path="purchaseNo" cssClass="col-sm-2 control-label">No Purchase</form:label>
                       			<div class="col-sm-10"> --%>
@@ -103,12 +104,12 @@
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
-	                    	<spring:bind path="purchaseDate">
+	                    	<spring:bind path="currentDate">
 	                    	<div class="form-group ${status.error  ? 'has-error' : ''}">
-	                    		<form:label path="purchaseDate" cssClass="col-sm-2 control-label">Date</form:label>
+	                    		<form:label path="currentDate" cssClass="col-sm-2 control-label">Date</form:label>
                       			<div class="col-sm-10">
-                        			<form:input path="purchaseDate" cssClass="form-control" />
-                        			<form:errors path="purchaseDate" class="control-label" />
+                        			<form:input path="currentDate" cssClass="form-control" />
+                        			<form:errors path="currentDate" class="control-label" />
 	                      		</div>
 	                    	</div>
 	                    	</spring:bind>
@@ -278,15 +279,17 @@
 	<script>
       $(function () {        
 		//Datemask dd/mm/yyyy
+		/* $("#purchaseDate").datepicker({
+       		format:'mm/dd/yyyy',
+       		orientation: 'bottom right'
+       	});  */
        	/* $("#purchaseDate").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"}); */
        	/*
-       	$("#purchaseDate").datepicker({
-       		format:"dd/mm/yyyy"
-       	}); 
+       	
        	$("#purchaseDate").datepicker().datepicker('setDate', new Date());
 
        	//*/
-       	$("#purchaseDate").inputmask("dd/mm/yyyy",{placeholder:"dd/mm/yyyy"}); 
+       	$("#currentDate").inputmask('dd/mm/yyyy',{placeholder:'dd/mm/yyyy'});
       });
     </script>
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.

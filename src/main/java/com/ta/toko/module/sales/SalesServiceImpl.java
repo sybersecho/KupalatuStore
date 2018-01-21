@@ -1,6 +1,7 @@
 package com.ta.toko.module.sales;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public void save(SalesInformation salesInformation) {
 		Sales sales = new Sales();
-		sales.setNo(sales.getNo());
+		sales.setNo(salesInformation.getNo());
 		sales.setSaleDate(salesInformation.getSalesDate());
 		sales.setTotalSale(salesInformation.getTotalSales());
 		sales.setSaleDetails(new ArrayList<SaleDetail>());
@@ -57,6 +58,32 @@ public class SalesServiceImpl implements SalesService {
 		for (Product p : listProduct) {
 			productDao.update(p);
 		}
+	}
+
+	@Override
+	public List<SalesInformation> searchSales(Date from, Date to) {
+		List<Sales> sales = salesDao.getReport(from, to);
+		List<SalesInformation> salesInformations = new ArrayList<SalesInformation>();
+
+		for (Sales s : sales) {
+			SalesInformation sInfo = new SalesInformation();
+			sInfo.setNo(s.getNo());
+			sInfo.setSalesDate(s.getSaleDate());
+			sInfo.setTotalSales(s.getTotalSale());
+			sInfo.setProductLines(new ArrayList<ProductLine>());
+
+			for (SaleDetail sDetail : s.getSaleDetails()) {
+				ProductLine pLine = new ProductLine();
+				pLine.setProduct(sDetail.getProduct());
+				pLine.setQuantity(sDetail.getQuantity());
+				pLine.setSubTotal(sDetail.getSubTotal());
+
+				sInfo.getProductLines().add(pLine);
+			}
+
+			salesInformations.add(sInfo);
+		}
+		return salesInformations;
 	}
 
 }

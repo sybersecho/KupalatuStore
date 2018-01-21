@@ -58,91 +58,101 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-			<h1>Purchase Information</h1>
+			<h1>Purchase Report</h1>
 			</section>
 
 			<!-- Main content -->
-			<section class="invoice">
-				<!-- title row -->
+			<section class="content">
 				<div class="row">
-		            <div class="col-xs-12">
-		              <h2 class="page-header">
-		                <i class="fa fa-globe"></i> Kupalatu Store.
-		                <small class="pull-right">Date: <fmt:formatDate value="${purchased.purchaseDate }" pattern="dd/MM/yyyy"/> </small>
-		              </h2>
-		            </div><!-- /.col -->
-	         	 </div>
-	         	 <!-- info row -->
-		         <div class="row invoice-info">
-		         	<div class="col-sm-8 invoice-col">
-			           	From
-			           	<address>
-			          	<strong>${supplier.name }.</strong><br>
-			                ${supplier.supplierAddress.line1}<br>
-			                ${supplier.supplierAddress.city },${supplier.supplierAddress.state },Post: ${supplier.supplierAddress.postCode }<br>
-			                Phone:  ${supplier.contact }<br>
-			                Email: ${supplier.email }
-			           	</address>
-		            </div><!-- /.col -->
-		            <div class="col-sm-4 invoice-col">
-		              <b>Purchase Number #${purchased.purchaseNo }</b><br>
-		            </div><!-- /.col -->
-		          </div><!-- /.row -->
-		          <!-- Table row -->
-          		<div class="row">
-          			<div class="col-xs-12 table-responsive">
-          				<table class="table table-striped">
-			          		<thead>
-			                  <tr>
-			                    <th>Product</th>
-			                    <th>Unit</th>
-			                    <th>Qty</th>
-			                    <th>Price</th>
-			                    <th>Subtotal</th>
-			                  </tr>
-			                </thead>
-			                <tbody>
-			                	<c:forEach items="${purchased.productLineInfos}" var="productLine">
-			                	<tr>
-					         		<td>${productLine.product.name }</td>
-					               	<td>${productLine.product.unit }</td>
-					            	<td>${productLine.quantity }</td>
-					             	<td>${productLine.purchasePrice }</td>
-					            	<td>${productLine.totalItem }</td>
-				           		</tr>
-			                	</c:forEach>							   	
-			                </tbody>
-          				</table>
-          			</div>
-          		</div><!-- /.row -->
-          		<div class="row">
-          			<div class="col-xs-6">
-          				<p class="lead">Details:</p>
-          				<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                			${purchased.details }
-           				</p>
-          			</div><!-- /.col -->
-          			<div class="col-xs-6">
-          				<p class="lead">Purchase Payment</p>
-          				<div class="table-responsive">
-          					<table class="table">
-          						<tr>
-                 					<th style="width:50%">Total:</th>
-                 					<td>${purchased.totalPurchased}</td>
-                				</tr>
-          					</table>
-          				</div>
-          			</div><!-- /.col -->
-          		</div><!-- /.row -->
-          		<div class="row">
-          			<div class="col-xs-12">          				
-          				<c:url value="/purchase/confirmed" var="confirmed"/>
-          				<form action="${confirmed }" method="GET">
-          					<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-          					<!-- <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button> -->
-          				</form>           				
-          			</div>
-          		</div><!-- /.row -->
+				<div class="col-xs-12">
+					<div class="box box-info">
+						<div class="box-header with-border">
+							<h3 class="box-title">Total Purchased Report</h3>
+						</div><!-- /.box-header -->
+						<c:url var="action" value="/report/purchase"/>
+						<form:form method="POST" commandName="report" action="${action }" cssClass="form-horizontal">						
+						<div class="box-body">
+						<div class="col-md-6">
+							<spring:bind path="strFromDate">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="strFromDate" cssClass="col-sm-2 control-label">From Date</form:label>
+								<div class="col-sm-10">
+									<form:input path="strFromDate" cssClass="form-control" placeholder="From Date"/>
+                      				<form:errors path="strFromDate" class="control-label" />
+								</div>
+							</div>
+							</spring:bind>
+						</div>
+						<div class="col-md-6">
+							<spring:bind path="strToDate">
+							<div class="form-group ${status.error  ? 'has-error' : ''}">
+								<form:label path="strToDate" cssClass="col-sm-2 control-label">To Date</form:label>
+								<div class="col-sm-10">
+									<form:input path="strToDate" cssClass="form-control" placeholder="To Date"/>
+                      				<form:errors path="strToDate" class="control-label" />
+								</div>
+							</div>
+							</spring:bind>					
+						</div>
+						</div>
+						<div class="box-footer clearfix">
+							<button class="btn btn-sm btn-danger btn-flat pull-left" type="submit" id="action" name="action" value="clear">Clear</button>
+							<button class="btn btn-sm btn-primary btn-flat pull-right" type="submit" id="action" name="action" value="search">Search</button>
+						</div>
+						
+						<div class="box-body table-responsive">	
+							<table id="purchase" class="table table-striped">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>Product Name</th>
+										<th>Quantity</th>
+										<th>Purchase Price</th>
+										<th>Total Cost</th>									
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="purchase" items="${report.purchased}" varStatus="index">
+										<c:forEach var="line" items="${purchase.productLineInfos }"> 
+											<tr>
+												<td>${purchase.purchaseNo }</td>
+												<td>${line.product.name }</td>
+												<td>${line.quantity }</td>
+												<td>${line.purchasePrice }</td>
+												<td>${line.totalItem }</td>
+											</tr>
+										</c:forEach>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+						<div class="box-body">
+							<div class="col-xs-12 col-md-6 col-md-offset-6">
+								<p class="lead">Sales Payment</p>
+								<div class="table-responsive">
+	          					<table class="table">
+	          						<thead>
+	          							<tr>
+	          								<th>Product Count</th>
+	          								<th>Purchase Qty</th>
+	          								<th>Total Purchase</th>
+	          							</tr>
+	          						</thead>
+	          						<tbody>
+	          							<tr>
+	          								<td>${report.productCount }</td>
+	          								<td>${report.purchaseQty }</td>
+	          								<td>${report.totalPurchase }</td>
+	          							</tr>
+	          						</tbody>
+	          					</table>								
+								</div>
+							</div>
+						</div>
+						</form:form>
+					</div><!-- /.box -->		
+				</div>		
+				</div>		
 			</section><!-- /.content -->
 			<div class="clearfix"></div>
 		</div><!-- /.content-wrapper -->
@@ -183,7 +193,10 @@
 	<script>
 		$(function() {
 			//Datemask dd/mm/yyyy
-			$("#purchaseDate").inputmask("dd/mm/yyyy", {
+			$("#strFromDate").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+			$("#strToDate").inputmask("dd/mm/yyyy", {
 				"placeholder" : "dd/mm/yyyy"
 			});
 		});

@@ -1,6 +1,7 @@
 package com.ta.toko.module.purchase;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,6 +35,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 		newPurchase.setSupplier(purchase.getSupplier());
 		newPurchase.setTotalPurchased(purchase.getTotalPurchased());
 		newPurchase.setPurchasedDetails(new ArrayList<PurchasedDetail>());
+		newPurchase.setPurchaseDate(purchase.getPurchaseDate());
+		logger.info(newPurchase.getPurchaseDate() + "");
 
 		List<Product> updateProduct = new ArrayList<Product>();
 
@@ -60,10 +63,43 @@ public class PurchaseServiceImpl implements PurchaseService {
 		}
 		logger.info("supplier: " + newPurchase.getSupplier().toString());
 		purchaseDao.save(newPurchase);
-		
+
 		for (Product product : updateProduct) {
 			productService.update(product);
 		}
+	}
+
+	@Override
+	public List<PurchaseInfo> searchPurchase(Date from, Date to) {
+		List<Purchase> purchases = purchaseDao.getReport(from, to);
+		List<PurchaseInfo> purchaseInfos = new ArrayList<PurchaseInfo>();
+
+		logger.info("purchase size: {}", purchases.size());
+
+		for (Purchase prc : purchases) {
+			PurchaseInfo pinfo = new PurchaseInfo();
+			pinfo.setPurchaseNo(prc.getPruchaseNo());
+			pinfo.setDetails(prc.getDetails());
+			pinfo.setSupplier(prc.getSupplier());
+			pinfo.setPurchaseDate(prc.getPurchaseDate());
+			pinfo.setTotalPurchased(prc.getTotalPurchased());
+			pinfo.setProductLineInfos(new ArrayList<ProductLineInfo>());
+			logger.info("purchase details: {}", prc.getPurchasedDetails().size());
+			for (PurchasedDetail prcDetail : prc.getPurchasedDetails()) {
+				ProductLineInfo pLine = new ProductLineInfo();
+				pLine.setProduct(prcDetail.getProduct());
+				pLine.setPurchasePrice(prcDetail.getPurchasePrice());
+				pLine.setTotalItem(prcDetail.getTotalItem());
+				pLine.setQuantity(prcDetail.getQuantity());
+
+				pinfo.getProductLineInfos().add(pLine);
+			}
+
+			purchaseInfos.add(pinfo);
+
+		}
+
+		return purchaseInfos;
 	}
 
 }

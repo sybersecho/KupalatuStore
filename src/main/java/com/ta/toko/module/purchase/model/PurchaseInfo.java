@@ -2,6 +2,8 @@ package com.ta.toko.module.purchase.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +22,7 @@ public class PurchaseInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String purchaseNo;
-	private Date purchaseDate;// = dateWithoutTime();
+	private Date purchaseDate = new Date();// = dateWithoutTime();
 	private Supplier supplier;
 	private String details;
 	private BigDecimal totalPurchased = BigDecimal.ZERO;
@@ -28,6 +30,8 @@ public class PurchaseInfo implements Serializable {
 	private ProductLineInfo productLine = new ProductLineInfo();
 	private boolean isEdit = false;
 	private int index = -1;
+//	private Date currentDate = new Date();
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 	public void setProductBarcode(String productBarcode) {
 		productLine.getProduct().setBarcode(productBarcode);
@@ -106,11 +110,30 @@ public class PurchaseInfo implements Serializable {
 	}
 
 	public Date getPurchaseDate() {
+//		Date pDate = null;
+//		try {
+//			pDate = formatter.parse(getCurrentDate());
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//		return pDate;
 		return purchaseDate;
 	}
 
 	public void setPurchaseDate(Date purchaseDate) {
 		this.purchaseDate = purchaseDate;
+	}
+	
+	public String getCurrentDate() {
+		return formatter.format(purchaseDate);
+	}
+	
+	public void setCurrentDate(String currentDate) {
+		try {
+			setPurchaseDate(formatter.parse(currentDate));;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Supplier getSupplier() {
@@ -196,14 +219,11 @@ public class PurchaseInfo implements Serializable {
 
 	public void addProductToLine() {
 		this.productLine.calculateTotalItem();
-//		logger.info("total item : " + this.productLine.getTotalItem());
-//		logger.info("current line size: " + productLineInfos.size());
 		if (isEdit) {
 			updateLineAt(index - 1, productLine);
 		} else {
 			addLineInfo(productLine);
 		}
-//		logger.info("current line size: " + productLineInfos.size());
 		productLine = new ProductLineInfo();
 
 	}
@@ -216,7 +236,6 @@ public class PurchaseInfo implements Serializable {
 		productLine = productLineInfos.get(index - 1);
 		setIndex(index);
 		setEdit(true);
-
 	}
 
 }

@@ -21,7 +21,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ta.toko.entity.Product;
-import com.ta.toko.entity.User;
 import com.ta.toko.module.login.CustomUserDetails;
 import com.ta.toko.module.product.ProductCriteria;
 import com.ta.toko.module.product.ProductService;
@@ -48,7 +47,6 @@ public class SalesController {
 	private ProductService productService;
 	@Autowired
 	private SalesService salesService;
-	// private ProductLine temp;
 
 	public SalesController() {
 		logger.debug("Sales Controller created");
@@ -72,7 +70,6 @@ public class SalesController {
 
 		SalesInformation currentSales = SalesSessionUtil.getSalesInSession(session);
 		model.addAttribute(SalesConstant.SESSION_NAME, currentSales);
-		// model.addAttribute("salesActive", "active");
 
 		return "sales/sales";
 	}

@@ -83,7 +83,7 @@
 				                      	<td>${product.barcode }</td>
 				                      	<td>${product.name }</td>
 				                      	<td>
-				                              <a href="<c:url value="/sales/product/${product.id}?i=${index }"/>" class="btn btn-warning"><i class="fa fa-pencil">Select</i></a>
+				                              <a href="<c:url value="/sales/product/${product.id}?i=${index }"/>" class="btn btn-warning"><i class="fa fa-pencil"> Select</i></a>
 				                         </td>
                     				</tr>
 				                    </c:forEach>

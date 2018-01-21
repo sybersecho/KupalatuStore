@@ -102,13 +102,13 @@
 								</div>
 							</div>
 							</spring:bind>
-							<spring:bind path="salesDate">
+							<spring:bind path="currentDate">
 							<div class="form-group ${status.error  ? 'has-error' : ''}">
 								<form:label path="salesDate" cssClass="col-sm-2 control-label">Date</form:label>
 								<!-- <label for="Date" class="col-sm-2 control-label">Date</label> -->
 								<div class="col-sm-10">
-                        			<form:input path="salesDate" cssClass="form-control" placeholder="Date"/>
-                      				<form:errors path="salesDate" class="control-label" />
+                        			<form:input path="currentDate" cssClass="form-control" placeholder="Date"/>
+                      				<form:errors path="currentDate" class="control-label" />
 									<!-- <input type="text" class="form-control" id="salesDate" placeholder="Date"> -->
 								</div>
 							</div>

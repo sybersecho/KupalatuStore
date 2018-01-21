@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="false"%>
 
 <!-- Left side column. contains the logo and sidebar -->
@@ -25,6 +26,16 @@
 			<li class="${salesActive}"><a href="<c:url value="/sales"/>"> <i
 					class="fa fa-opencart"></i> <span>Sales</span>
 			</a></li>
+			<li class="treeview ${reportActive}">
+				<a href="#">
+                	<i class="fa fa-share"></i> <span>Report</span>
+                	<i class="fa fa-angle-left pull-right"></i>
+              	</a>
+              	<ul class="treeview-menu">
+              		<li class="${reportPurchaseActive}"><a href="<c:url value="/report/purchase"/>"><i class="fa fa-circle-o"></i> Purchase</a></li>
+              		<li class="${reportSalesActive}"><a href="<c:url value="/report/sales"/>"><i class="fa fa-circle-o"></i> Sales</a></li>
+              	</ul>
+			</li>
 		</ul>
 		<!-- /.sidebar-menu -->
 	</section>

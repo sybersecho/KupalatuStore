@@ -62,12 +62,12 @@ public class PurchaseController {
 	public PurchaseController() {
 		logger.debug("Purchase Controller created");
 	}
-	
+
 	@ModelAttribute("purchaseActive")
 	public String purchaseActive() {
 		return "active";
 	}
-	
+
 	@ModelAttribute("user")
 	public CustomUserDetails getUser() {
 		CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -83,25 +83,24 @@ public class PurchaseController {
 		suppliers = supplierService.getAll();
 		model.addAttribute(PurchaseConstant.SESSION_NAME, purchaseInSession);
 		model.addAttribute("suppliers", suppliers);
-		// model.addAttribute("actionUrl", "/purchase/next/product");
 		logger.info("line info: " + purchaseInSession.getProductLineInfos().size());
 		logger.info("Date: " + purchaseInSession.getPurchaseDate());
-		// SessionUtil.print(model, null, session);
 		return "purchase/purchase-detail";
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String purchaseDetail(@Valid @ModelAttribute(PurchaseConstant.SESSION_NAME) PurchaseInfo purchase,
 			BindingResult result, @RequestParam("action") String action, Model model, HttpServletRequest request) {
-		SessionUtil.print(model, request, null);
-
+		// SessionUtil.print(model, request, null);
+		logger.info(purchase.getPurchaseDate() + "");
 		if (action.equals("search")) {
 			return searchProduct(model, purchase, result);
 		} else if (action.equals("add")) {
-			return addLineToPurchase(purchase, result);
+			return addLineToPurchase(purchase, result, model);
 		} else {
 			detailValidator.validate(purchase, result);
 			if (result.hasErrors()) {
+				model.addAttribute("suppliers", suppliers);
 				return "purchase/purchase-detail";
 			}
 			return "redirect:/purchase/confirm";
@@ -149,7 +148,7 @@ public class PurchaseController {
 
 		PurchaseInfo purchaseInSession = PurchaseSessionUtil.getPurchaseInSession(session);
 		purchaseInSession.setProduct(p);
-
+		logger.info("date: {}", purchaseInSession.getPurchaseDate());
 		return "redirect:/purchase";
 	}
 
@@ -161,7 +160,20 @@ public class PurchaseController {
 		status.setComplete();
 		PurchaseSessionUtil.removePurchaseInfoInSession(session);
 		model.addFlashAttribute("purchaseSaved", true);
-		
+
+		return "redirect:/purchase";
+	}
+
+	@RequestMapping(value = "/cancel", method = RequestMethod.GET)
+	public String cancelSearchProduct() {
+		return "redirect:/purchase";
+	}
+
+	@RequestMapping(value = "/clear", method = RequestMethod.GET)
+	public String clear(HttpSession session, SessionStatus status) {
+		logger.debug("clear purchased");
+		status.setComplete();
+		PurchaseSessionUtil.removePurchaseInfoInSession(session);
 		return "redirect:/purchase";
 	}
 
@@ -170,6 +182,7 @@ public class PurchaseController {
 
 		searchValidator.validate(purchase, result);
 		if (result.hasErrors()) {
+			model.addAttribute("suppliers", suppliers);
 			return "purchase/purchase-detail";
 		}
 
@@ -189,10 +202,11 @@ public class PurchaseController {
 		return "purchase/search-product";
 	}
 
-	private String addLineToPurchase(PurchaseInfo purchase, BindingResult result) {
+	private String addLineToPurchase(PurchaseInfo purchase, BindingResult result, Model model) {
 		logger.debug("action is add");
 		addProductValidator.validate(purchase, result);
 		if (result.hasErrors()) {
+			model.addAttribute("suppliers", suppliers);
 			return "purchase/purchase-detail";
 		}
 

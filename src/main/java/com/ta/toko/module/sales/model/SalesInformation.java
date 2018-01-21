@@ -2,6 +2,8 @@ package com.ta.toko.module.sales.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,13 +20,14 @@ public class SalesInformation implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Date salesDate;
+	private Date salesDate = new Date();
 	private String no;
 	private BigDecimal totalSales = BigDecimal.ZERO;
 	private List<ProductLine> productLines = new ArrayList<ProductLine>();
 	private ProductLine productLine = new ProductLine();
 	private int editPosition = -1;
 	private boolean isEdited = false;
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 	public void setProductBarcode(String productBarcode) {
 		productLine.getProduct().setBarcode(productBarcode);
@@ -114,6 +117,24 @@ public class SalesInformation implements Serializable {
 
 	public void setSalesDate(Date salesDate) {
 		this.salesDate = salesDate;
+	}
+
+	public String getCurrentDate() {
+//		if(getSalesDate()== null) {
+//			logger.info("sales date null");
+//			setSalesDate(new Date());
+//		}else {
+//			logger.info("sales date not null");
+//		}
+		return formatter.format(getSalesDate());
+	}
+
+	public void setCurrentDate(String currentDate) {
+		try {
+			setSalesDate(formatter.parse(currentDate));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public BigDecimal getTotalSales() {
