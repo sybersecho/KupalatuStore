@@ -62,16 +62,15 @@
             <c:if test="${param.error != null}">
             	<div class="alert alert-danger">
             		<p>Invalid username and password.</p>
-            		Reason : ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
             	</div>
             </c:if>
           <div class="row">
             <div class="col-xs-8">
-              <div class="checkbox icheck">
+              <!-- <div class="checkbox icheck">
                 <label>
                   <input type="checkbox"> Remember Me
                 </label>
-              </div>
+              </div> -->
             </div><!-- /.col -->
             
             <div class="col-xs-4">

@@ -32,13 +32,15 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
-		creatUser();
+//		creatUser();
 		if (error != null) {
 			model.addAttribute("error", "The username and password is incorrect!");
 		}
 
 		return "login/login";
 	}
+	
+
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {

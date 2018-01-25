@@ -79,7 +79,7 @@ public class PurchaseController {
 	public String home(Model model, HttpSession session) {
 		logger.debug("Purchase detail show");
 		PurchaseInfo purchaseInSession = PurchaseSessionUtil.getPurchaseInSession(session);
-		dummies.createSupplierAndProduct();
+//		dummies.createSupplierAndProduct();
 		suppliers = supplierService.getAll();
 		model.addAttribute(PurchaseConstant.SESSION_NAME, purchaseInSession);
 		model.addAttribute("suppliers", suppliers);
